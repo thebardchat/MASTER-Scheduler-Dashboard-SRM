@@ -340,3 +340,8 @@ MASTER-Scheduler-Dashboard-SRM
 ---
 
 *Last updated: 2026-03-14 · Session 2 Complete · v1.2 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
+
+## Claude Code Rules
+- Commit and push directly to `main`. Do NOT create branches.
+- Run build/test commands before committing.
+- Update CLAUDE.md session log before final commit.
