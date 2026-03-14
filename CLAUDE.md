@@ -263,18 +263,21 @@ MASTER-Scheduler-Dashboard-SRM/
 - [x] Created CLAUDE.md and README.md
 - [x] Defined load maximization strategy
 - [x] Mapped outside help vs block plant supply chain
-- [ ] Migrate srm-dispatch source into this repo
-- [ ] Migrate srm-management-os content
+- [x] Migrate srm-dispatch source into this repo
+- [x] Migrate srm-management-os content (SOPs, personnel, scripts, affirmations, dashboard.html)
+- [x] Add 908 block plant to plant config (ALL_PLANTS + SUBS)
+- [x] Update package.json (name, homepage) and vite.config.js (base path)
+- [x] Created docs/master-plan.md with phased roadmap
+- [x] npm install && npm run build — passes clean
 - [ ] Build load priority engine (block plants first)
-- [ ] Add 908 block plant to plant config
 - [ ] Integrate SAMSARA data feeds
 - [ ] Build weekly load report (loads per plant, SRM vs outside)
 
 ### Next Session Priorities
-1. Clone and merge source repos into this structure
-2. Add load counting/tracking per plant
-3. Build dashboard view showing which plants need SRM attention today
-4. Update srm-dispatch-router skill with new outside help logic
+1. Add load counting/tracking per plant
+2. Build dashboard view showing which plants need SRM attention today
+3. Update srm-dispatch-router skill with new outside help logic
+4. Build load priority engine (block plants → partial-help gaps → full-service)
 
 ---
 

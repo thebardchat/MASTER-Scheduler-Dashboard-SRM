@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Tolerance Cleanliness SOP | SRM Management OS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 30px; }
+        .header { text-align: center; border-bottom: 3px solid var(--srm-gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--srm-gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .zero-banner { background: linear-gradient(135deg, #8B0000, #4a0000); border: 3px solid var(--srm-gold); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 30px; }
+        .zero-banner .zero { font-size: 5rem; color: var(--srm-gold); font-weight: bold; line-height: 1; }
+        .zero-banner .tolerance { font-size: 1.8rem; color: #fff; text-transform: uppercase; letter-spacing: 3px; }
+        .section { background: var(--srm-accent-blue); border-radius: 8px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--srm-gold); }
+        .section-title { color: var(--srm-gold); font-size: 1.5rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .standard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .standard-item { background: rgba(0,45,98,0.5); border-radius: 8px; padding: 15px; border-left: 3px solid var(--srm-gold); }
+        .standard-item h4 { color: var(--srm-gold); margin-bottom: 8px; }
+        .standard-item p { font-size: 0.95rem; opacity: 0.9; margin: 0; }
+        .frequency-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .frequency-table th, .frequency-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .frequency-table th { background: var(--srm-blue); color: var(--srm-gold); }
+        .frequency-table tr:hover { background: rgba(255,215,0,0.1); }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+        .badge-daily { background: #28a745; }
+        .badge-weekly { background: #17a2b8; }
+        .badge-shift { background: var(--srm-gold); color: var(--srm-blue); }
+        .consequence-box { background: linear-gradient(135deg, rgba(139,0,0,0.3), rgba(74,0,0,0.3)); border: 2px solid #ff4444; border-radius: 8px; padding: 20px; margin-top: 30px; }
+        .consequence-box h3 { color: #ff6666; margin-bottom: 15px; }
+        .consequence-list { list-style: none; padding: 0; }
+        .consequence-list li { padding: 10px 0; padding-left: 25px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .consequence-list li:before { content: "⚡"; position: absolute; left: 0; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--srm-gold); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .inspection-areas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .area-card { background: var(--srm-blue); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 15px; text-align: center; }
+        .area-card .icon { font-size: 2rem; margin-bottom: 10px; }
+        .area-card .name { color: var(--srm-gold); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🧹 CLEANLINESS STANDARDS</h1>
+            <p class="subtitle">Zero-Tolerance Standard Operating Procedure</p>
+        </div>
+
+        <div class="zero-banner">
+            <div class="zero">ZERO</div>
+            <div class="tolerance">Tolerance Policy</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">📋 Daily Cleanliness Standards</h3>
+            <div class="standard-grid">
+                <div class="standard-item">
+                    <h4>Truck Fleet</h4>
+                    <p>All mixer trucks washed and drums cleaned before end of each shift. No dried concrete buildup tolerated.</p>
+                </div>
+                <div class="standard-item">
+                    <h4>Batch Plant</h4>
+                    <p>Control room, scales, and loading area swept and organized. Spillage cleaned immediately.</p>
+                </div>
+                <div class="standard-item">
+                    <h4>Yard & Grounds</h4>
+                    <p>Material piles contained, drainage clear, no debris accumulation. Professional appearance at all times.</p>
+                </div>
+                <div class="standard-item">
+                    <h4>Break Areas</h4>
+                    <p>Employee areas kept clean, trash disposed properly, refrigerator cleaned weekly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">⏰ Cleaning Frequency Schedule</h3>
+            <table class="frequency-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Frequency</th>
+                        <th>Responsible</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Truck exterior wash</td>
+                        <td><span class="badge badge-daily">Daily</span></td>
+                        <td>Drivers</td>
+                    </tr>
+                    <tr>
+                        <td>Drum interior cleanout</td>
+                        <td><span class="badge badge-shift">Each Load</span></td>
+                        <td>Drivers</td>
+                    </tr>
+                    <tr>
+                        <td>Batch plant sweep</td>
+                        <td><span class="badge badge-shift">End of Shift</span></td>
+                        <td>Plant Operator</td>
+                    </tr>
+                    <tr>
+                        <td>Office cleaning</td>
+                        <td><span class="badge badge-daily">Daily</span></td>
+                        <td>All Staff</td>
+                    </tr>
+                    <tr>
+                        <td>Deep equipment cleaning</td>
+                        <td><span class="badge badge-weekly">Weekly</span></td>
+                        <td>Maintenance Team</td>
+                    </tr>
+                    <tr>
+                        <td>Yard inspection</td>
+                        <td><span class="badge badge-daily">Daily</span></td>
+                        <td>Supervisor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">🔍 Inspection Areas</h3>
+            <div class="inspection-areas">
+                <div class="area-card">
+                    <div class="icon">🚛</div>
+                    <div class="name">Fleet</div>
+                </div>
+                <div class="area-card">
+                    <div class="icon">🏭</div>
+                    <div class="name">Plant</div>
+                </div>
+                <div class="area-card">
+                    <div class="icon">🅿️</div>
+                    <div class="name">Yard</div>
+                </div>
+                <div class="area-card">
+                    <div class="icon">🏢</div>
+                    <div class="name">Office</div>
+                </div>
+                <div class="area-card">
+                    <div class="icon">🚿</div>
+                    <div class="name">Washout</div>
+                </div>
+                <div class="area-card">
+                    <div class="icon">🛠️</div>
+                    <div class="name">Shop</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="consequence-box">
+            <h3>⚠️ Non-Compliance Consequences</h3>
+            <ul class="consequence-list">
+                <li><strong>First Offense:</strong> Verbal warning with documented coaching session</li>
+                <li><strong>Second Offense:</strong> Written warning placed in personnel file</li>
+                <li><strong>Third Offense:</strong> One-day suspension without pay</li>
+                <li><strong>Fourth Offense:</strong> Termination review with management</li>
+            </ul>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.7; font-style: italic;">
+            "Cleanliness reflects our commitment to excellence."
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Fire | SRM Management OS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 30px; }
+        .header { text-align: center; border-bottom: 3px solid var(--srm-gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--srm-gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .fire-banner { background: linear-gradient(135deg, #8B0000, #FF4500, #FFD700); border-radius: 12px; padding: 40px; text-align: center; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .fire-banner:before { content: "🔥"; font-size: 8rem; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); opacity: 0.3; }
+        .fire-banner h2 { font-size: 2rem; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+        .fire-banner .time { font-size: 1.2rem; color: rgba(255,255,255,0.9); position: relative; z-index: 1; }
+        .section { background: var(--srm-accent-blue); border-radius: 12px; padding: 30px; margin-bottom: 25px; border: 2px solid var(--srm-gold); }
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .section-icon { font-size: 2.5rem; }
+        .section-title { color: var(--srm-gold); font-size: 1.6rem; font-weight: bold; }
+        .affirmation { background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05)); border-left: 4px solid var(--srm-gold); border-radius: 0 8px 8px 0; padding: 20px; margin-bottom: 15px; font-size: 1.1rem; line-height: 1.8; }
+        .affirmation:before { content: "✦ "; color: var(--srm-gold); }
+        .scripture { background: rgba(0,45,98,0.5); border-radius: 8px; padding: 25px; margin-top: 20px; text-align: center; }
+        .scripture .verse { font-style: italic; font-size: 1.2rem; line-height: 1.8; margin-bottom: 15px; }
+        .scripture .reference { color: var(--srm-gold); font-weight: bold; }
+        .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .value-card { background: rgba(0,45,98,0.5); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 20px; text-align: center; }
+        .value-card .icon { font-size: 2rem; margin-bottom: 10px; }
+        .value-card .name { color: var(--srm-gold); font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .value-card .desc { font-size: 0.9rem; opacity: 0.9; }
+        .mantra-box { background: linear-gradient(135deg, var(--srm-gold), #FFA500); border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0; }
+        .mantra-box .text { color: var(--srm-blue); font-size: 1.5rem; font-weight: bold; }
+        .daily-focus { background: rgba(255,215,0,0.1); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 20px; margin-top: 20px; }
+        .daily-focus h4 { color: var(--srm-gold); margin-bottom: 15px; }
+        .focus-list { list-style: none; padding: 0; }
+        .focus-list li { padding: 10px 0; padding-left: 30px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .focus-list li:before { content: "→"; position: absolute; left: 0; color: var(--srm-gold); font-weight: bold; }
+        .focus-list li:last-child { border-bottom: none; }
+        .commitment { background: var(--srm-accent-blue); border: 3px solid var(--srm-gold); border-radius: 12px; padding: 30px; margin-top: 30px; text-align: center; }
+        .commitment h3 { color: var(--srm-gold); font-size: 1.5rem; margin-bottom: 20px; }
+        .commitment p { font-size: 1.1rem; line-height: 1.8; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--srm-gold); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .prayer { background: linear-gradient(135deg, rgba(139,69,19,0.3), rgba(0,45,98,0.5)); border-radius: 12px; padding: 25px; margin-top: 20px; border: 1px solid rgba(255,215,0,0.5); }
+        .prayer h4 { color: var(--srm-gold); margin-bottom: 15px; text-align: center; }
+        .prayer p { font-style: italic; line-height: 1.8; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🔥 MORNING FIRE</h1>
+            <p class="subtitle">Spiritual & Leadership Daily Affirmations</p>
+        </div>
+
+        <div class="fire-banner">
+            <h2>IGNITE YOUR DAY</h2>
+            <p class="time">Start Each Morning with Purpose & Power</p>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">✝️</span>
+                <span class="section-title">Spiritual Foundation</span>
+            </div>
+
+            <div class="affirmation">I am a child of God, created for excellence and called to serve others with integrity.</div>
+            <div class="affirmation">My work is my worship. Every task I complete today glorifies my Creator.</div>
+            <div class="affirmation">I walk in faith, not fear. No challenge is greater than the strength within me.</div>
+            <div class="affirmation">I am blessed to be a blessing. My success creates opportunity for others.</div>
+
+            <div class="scripture">
+                <p class="verse">"Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."</p>
+                <p class="reference">— Colossians 3:23</p>
+            </div>
+
+            <div class="prayer">
+                <h4>Morning Prayer</h4>
+                <p>Lord, grant me wisdom to lead well today. Give me strength for every challenge, patience with every person, and vision to see opportunity where others see obstacles. Let my actions reflect Your love and my words bring encouragement. Amen.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">👑</span>
+                <span class="section-title">Leadership Declarations</span>
+            </div>
+
+            <div class="affirmation">I am a leader worth following. My example sets the standard for excellence.</div>
+            <div class="affirmation">I embrace responsibility. Where others see problems, I create solutions.</div>
+            <div class="affirmation">I build people up. Every person I encounter today will be better for having met me.</div>
+            <div class="affirmation">I am accountable for results. Excuses are not in my vocabulary.</div>
+            <div class="affirmation">I lead with courage, decide with confidence, and execute with precision.</div>
+
+            <div class="daily-focus">
+                <h4>Today's Leadership Focus</h4>
+                <ul class="focus-list">
+                    <li>Catch someone doing something right and recognize them</li>
+                    <li>Address one difficult conversation I've been avoiding</li>
+                    <li>Spend 10 minutes coaching a team member</li>
+                    <li>Model the behavior I expect from others</li>
+                    <li>End the day stronger than I started it</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">💎</span>
+                <span class="section-title">Our Core Values</span>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="icon">🤝</div>
+                    <div class="name">SERVICE</div>
+                    <div class="desc">Customers first, always. Their success is our success.</div>
+                </div>
+                <div class="value-card">
+                    <div class="icon">✨</div>
+                    <div class="name">CLEANLINESS</div>
+                    <div class="desc">Excellence in appearance reflects excellence in performance.</div>
+                </div>
+                <div class="value-card">
+                    <div class="icon">💪</div>
+                    <div class="name">LABOR</div>
+                    <div class="desc">Hard work is our competitive advantage. We outwork everyone.</div>
+                </div>
+                <div class="value-card">
+                    <div class="icon">👑</div>
+                    <div class="name">LEADERSHIP</div>
+                    <div class="desc">Every team member leads by example, every day.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mantra-box">
+            <p class="text">"If you aren't busy doing something, GET BUSY!"</p>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <span class="section-title">Mission Alignment</span>
+            </div>
+
+            <div class="affirmation">We ARE the best ready-mix provider in North Alabama.</div>
+            <div class="affirmation">Every load we deliver represents our commitment to excellence.</div>
+            <div class="affirmation">Our customers trust us because we earn that trust daily.</div>
+            <div class="affirmation">We compete with yesterday's performance, not our competitors.</div>
+
+            <div class="scripture">
+                <p class="verse">"Commit to the Lord whatever you do, and he will establish your plans."</p>
+                <p class="reference">— Proverbs 16:3</p>
+            </div>
+        </div>
+
+        <div class="commitment">
+            <h3>🔥 MY DAILY COMMITMENT</h3>
+            <p>Today, I commit to excellence in everything I do. I will serve with purpose, work with intensity, lead with integrity, and leave this place better than I found it. I am grateful for this opportunity and will not waste a single moment.</p>
+            <p style="margin-top: 20px; color: var(--srm-gold); font-weight: bold; font-size: 1.3rem;">LET'S GO!</p>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.7; font-style: italic;">
+            "The only way to do great work is to love what you do."
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14-Day Trial Performance Audit | SRM Management OS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px; }
+        .header { text-align: center; border-bottom: 3px solid var(--srm-gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--srm-gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .trial-banner { background: linear-gradient(135deg, var(--srm-accent-blue), var(--srm-blue)); border: 2px solid var(--srm-gold); border-radius: 12px; padding: 25px; margin-bottom: 30px; display: flex; justify-content: space-around; align-items: center; }
+        .trial-stat { text-align: center; }
+        .trial-stat .number { font-size: 3rem; color: var(--srm-gold); font-weight: bold; }
+        .trial-stat .label { font-size: 1rem; opacity: 0.9; }
+        .employee-info { background: var(--srm-accent-blue); border-radius: 8px; padding: 20px; margin-bottom: 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .info-field label { display: block; color: var(--srm-gold); font-size: 0.85rem; margin-bottom: 5px; }
+        .info-field .value { background: rgba(0,45,98,0.5); padding: 10px; border-radius: 4px; border: 1px solid rgba(255,215,0,0.3); }
+        .tracker-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 30px; }
+        .day-card { background: var(--srm-accent-blue); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 15px; text-align: center; min-height: 120px; }
+        .day-card.week-label { background: var(--srm-gold); color: var(--srm-blue); font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .day-card .day-number { font-size: 1.5rem; color: var(--srm-gold); font-weight: bold; margin-bottom: 10px; }
+        .day-card .status { font-size: 0.8rem; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+        .status-pass { background: #28a745; }
+        .status-fail { background: #dc3545; }
+        .status-pending { background: #6c757d; }
+        .rating-circles { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
+        .rating-circles .circle { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--srm-gold); }
+        .rating-circles .circle.filled { background: var(--srm-gold); }
+        .criteria-section { background: var(--srm-accent-blue); border-radius: 8px; padding: 25px; margin-bottom: 25px; }
+        .criteria-section h3 { color: var(--srm-gold); margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 10px; }
+        .criteria-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .criteria-item { background: rgba(0,45,98,0.5); border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .criteria-item .name { font-weight: bold; }
+        .criteria-item .scale { display: flex; gap: 5px; }
+        .criteria-item .scale span { width: 30px; height: 30px; border: 1px solid var(--srm-gold); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .decision-box { background: linear-gradient(135deg, var(--srm-accent-blue), var(--srm-blue)); border: 3px solid var(--srm-gold); border-radius: 12px; padding: 30px; margin-top: 30px; }
+        .decision-box h3 { color: var(--srm-gold); text-align: center; margin-bottom: 25px; font-size: 1.5rem; }
+        .decision-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .decision-option { text-align: center; padding: 20px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+        .decision-option.hire { border-color: #28a745; background: rgba(40,167,69,0.2); }
+        .decision-option.extend { border-color: #ffc107; background: rgba(255,193,7,0.2); }
+        .decision-option.term { border-color: #dc3545; background: rgba(220,53,69,0.2); }
+        .decision-option .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .decision-option .label { font-weight: bold; font-size: 1.1rem; }
+        .notes-section { margin-top: 25px; }
+        .notes-section label { display: block; color: var(--srm-gold); margin-bottom: 10px; }
+        .notes-section textarea { width: 100%; min-height: 100px; background: rgba(0,45,98,0.5); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; padding: 15px; color: #fff; font-family: inherit; resize: vertical; }
+        .signature-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 30px; }
+        .signature-box { border-top: 2px solid var(--srm-gold); padding-top: 10px; }
+        .signature-box label { color: var(--srm-gold); font-size: 0.9rem; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--srm-gold); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .core-values { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
+        .value-card { background: var(--srm-accent-blue); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 15px; text-align: center; }
+        .value-card .icon { font-size: 1.5rem; margin-bottom: 5px; }
+        .value-card .name { color: var(--srm-gold); font-weight: bold; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>📊 14-DAY TRIAL TRACKER</h1>
+            <p class="subtitle">New Employee Performance Audit System</p>
+        </div>
+
+        <div class="trial-banner">
+            <div class="trial-stat">
+                <div class="number">14</div>
+                <div class="label">Trial Days</div>
+            </div>
+            <div class="trial-stat">
+                <div class="number">4</div>
+                <div class="label">Core Values</div>
+            </div>
+            <div class="trial-stat">
+                <div class="number">100%</div>
+                <div class="label">Standards Expected</div>
+            </div>
+        </div>
+
+        <div class="core-values">
+            <div class="value-card">
+                <div class="icon">🤝</div>
+                <div class="name">SERVICE</div>
+            </div>
+            <div class="value-card">
+                <div class="icon">✨</div>
+                <div class="name">CLEANLINESS</div>
+            </div>
+            <div class="value-card">
+                <div class="icon">💪</div>
+                <div class="name">LABOR</div>
+            </div>
+            <div class="value-card">
+                <div class="icon">👑</div>
+                <div class="name">LEADERSHIP</div>
+            </div>
+        </div>
+
+        <div class="employee-info">
+            <div class="info-field">
+                <label>Employee Name</label>
+                <div class="value">_________________</div>
+            </div>
+            <div class="info-field">
+                <label>Position</label>
+                <div class="value">_________________</div>
+            </div>
+            <div class="info-field">
+                <label>Start Date</label>
+                <div class="value">_________________</div>
+            </div>
+            <div class="info-field">
+                <label>Supervisor</label>
+                <div class="value">_________________</div>
+            </div>
+            <div class="info-field">
+                <label>Department</label>
+                <div class="value">_________________</div>
+            </div>
+            <div class="info-field">
+                <label>Trial End Date</label>
+                <div class="value">_________________</div>
+            </div>
+        </div>
+
+        <h3 style="color: var(--srm-gold); margin-bottom: 15px;">📅 Daily Performance Tracking</h3>
+
+        <div class="tracker-grid">
+            <!-- Week 1 -->
+            <div class="day-card week-label">WEEK 1</div>
+            <div class="day-card">
+                <div class="day-number">1</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">2</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">3</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">4</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">5</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">6</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <!-- Week 2 -->
+            <div class="day-card week-label">WEEK 2</div>
+            <div class="day-card">
+                <div class="day-number">8</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">9</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">10</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">11</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">12</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="day-card">
+                <div class="day-number">13</div>
+                <span class="status status-pending">Pending</span>
+                <div class="rating-circles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="criteria-section">
+            <h3>📋 Performance Criteria Assessment</h3>
+            <div class="criteria-grid">
+                <div class="criteria-item">
+                    <span class="name">Punctuality & Attendance</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Safety Compliance</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Quality of Work</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Speed & Efficiency</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Teamwork & Attitude</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Equipment Care</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Following Instructions</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+                <div class="criteria-item">
+                    <span class="name">Initiative</span>
+                    <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <label>📝 Supervisor Notes & Observations</label>
+            <textarea placeholder="Document specific examples of performance, areas of strength, areas needing improvement, and any concerns..."></textarea>
+        </div>
+
+        <div class="decision-box">
+            <h3>🎯 14-DAY DECISION</h3>
+            <div class="decision-options">
+                <div class="decision-option hire">
+                    <div class="icon">✅</div>
+                    <div class="label">HIRE</div>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Convert to full employee status</p>
+                </div>
+                <div class="decision-option extend">
+                    <div class="icon">⏳</div>
+                    <div class="label">EXTEND</div>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Additional trial period needed</p>
+                </div>
+                <div class="decision-option term">
+                    <div class="icon">❌</div>
+                    <div class="label">TERMINATE</div>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Does not meet standards</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="signature-row">
+            <div class="signature-box">
+                <label>Supervisor Signature & Date</label>
+            </div>
+            <div class="signature-box">
+                <label>Manager Approval & Date</label>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.7; font-style: italic;">
+            "If you aren't busy doing something, get busy!"
+        </p>
+    </div>
+</body>
+</html>
