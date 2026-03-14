@@ -1,13 +1,14 @@
 This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
+
 # CLAUDE.md — MASTER-Scheduler-Dashboard-SRM
-### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.0
-### Last Session: 2026-03-14
+### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.2
+### Last Session: 2026-03-14 (Session 2 COMPLETE)
 
 ---
 
 ## What This Repo Is
 
-Master monorepo combining SRM Concrete's dispatch routing engine, management dashboard, SOPs, and scheduling tools into a single deployable system. Replaces scattered repos (`srm-dispatch`, `srm-management-os`) with one source of truth.
+Master monorepo combining SRM Concrete's dispatch routing engine, management dashboard, SOPs, and scheduling tools into a single deployable system. Replaces scattered repos (`srm-dispatch`, `SB-Management-OS`) with one source of truth.
 
 **Primary goal:** Maximize aggregate loads delivered to plants by SRM fleet trucks, accounting for which plants receive outside hauler help and which (block plants) must be supplied exclusively by SRM drivers.
 
@@ -47,7 +48,7 @@ Plants that receive aggregate deliveries from **outside haulers** (not SRM fleet
 
 ### Routing Priority Order
 1. Block plants (907, 908) — zero outside help, SRM fleet is their only source
-2. Plants with partial outside help — fill gaps outside haulers miss (rock to sand-covered plants, sand to rock-covered plants)
+2. Plants with partial outside help — fill gaps outside haulers miss
 3. Full-service plants (506, 511, 513, 514, 519) — SRM supplies everything
 4. Scrap runs every morning — generates backhaul rock, cleans yards
 5. No empty trucks — every leg carries material
@@ -75,8 +76,8 @@ Plants that receive aggregate deliveries from **outside haulers** (not SRM fleet
 |--------|-------|----------|
 | Charlie | 04:15 | A |
 | Bryant | 04:30 | B |
-| Jamie | 05:00 | C |
-| Eddie | 05:00 | C |
+| Jamie | 04:30 | C |
+| Eddie | 04:00 | C |
 
 ### Crew 506 (Decatur/West-Central)
 | Driver | Start | BP Group |
@@ -90,7 +91,7 @@ Plants that receive aggregate deliveries from **outside haulers** (not SRM fleet
 | Driver | Start | Notes |
 |--------|-------|-------|
 | Stacey | 04:00 | Always on BP rotation |
-| Alexis | 07:00 | 516 base, dual-round RG/MM routes |
+| Alexis | 08:00 | 516 base, dual-round RG/MM routes, short day |
 
 ### Dispatch Manager
 | Name | Role |
@@ -146,14 +147,21 @@ BP→518: 25    BP→907: 200   BP→511: 200
 
 ## Route Logic Engine
 
-### Shorthand System (`src/utils/shorthand.js`)
-Generates text-based route cards per driver. Core functions:
-- `buildShorthand(name, options)` — master route builder
-- `p(code, down, subMap)` — plant substitution when a plant is down
-- `after514(homePlant, down, subMap)` — 514 chain rule (sand→514→scrap→LQ→RG rock→home)
-- `endOfShift519()` — time-aware route shortening near quarry close
-- `bpFirstRock()` — rotating BP first-rock delivery plant
-- `check518()` — call Shane/Anthony before sending to 518
+### Key Files
+- `src/utils/shorthand.js` — route generation (`buildShorthand`, `p`, `after514`, `endOfShift519`, `bpFirstRock`, `check518`)
+- `src/utils/rotation.js` — BP cycling, calendar, cycle day
+- `src/utils/loadCounter.js` — plant load counting, priority scoring (RED/YELLOW/GREEN), outside help awareness
+- `src/config/crew.js` — 16 drivers, BP groups A/B/C, rotations, tabs
+- `src/config/plants.js` — 19 locations, OUTSIDE_SAND/ROCK sets, SUBS map
+- `src/config/distances.js` — drive time matrix, quarry close logic (960 min = 4PM)
+- `src/components/PlantDashboard.jsx` — per-plant priority grid with load counts, block plant alerts
+
+### Key Config Sets
+- `OUTSIDE_SAND`: ["507","508","525","518"]
+- `OUTSIDE_ROCK`: ["516"]
+- `SAND_TARGETS`: ["519","506","511","513","514","516"]
+- `BLOCK_PLANTS`: ["907","908"] — zero outside help, RED priority if 0 loads
+- `SUBS`: fallback map when plant DOWN (907/908 have NO subs — alert Shane)
 
 ### Rotation System (`src/config/crew.js`)
 - **BP Groups A/B/C** rotate on `cycleDay % 3`
@@ -179,7 +187,7 @@ When a plant is DOWN, `SUBS` map provides fallback:
 | UI | Vanilla CSS, mobile-first |
 | State | Client-side only |
 | PWA | vite-plugin-pwa, offline-capable |
-| Deploy | GitHub Pages (`thebardchat.github.io/srm-dispatch`) |
+| Deploy | GitHub Pages (`thebardchat.github.io/MASTER-Scheduler-Dashboard-SRM`) |
 | Local | Pi 5 at `http://10.0.0.42:3031` |
 
 ---
@@ -224,42 +232,47 @@ When a plant is DOWN, `SUBS` map provides fallback:
 
 ---
 
-## Repo Structure (Target)
+## Repo Structure (Session 2 Complete)
 
 ```
 MASTER-Scheduler-Dashboard-SRM/
-├── CLAUDE.md                    ← you are here
+├── CLAUDE.md                        ← Claude Code context (v1.2)
 ├── README.md
+├── styles.css                       ← root stylesheet for SOP/management pages
 ├── package.json
 ├── vite.config.js
 ├── index.html
 ├── src/
-│   ├── App.jsx                  ← main dispatch UI
+│   ├── main.jsx
+│   ├── App.jsx                      ← dispatch UI + PLANTS tab + nav footer
+│   ├── components/
+│   │   └── PlantDashboard.jsx       ← plant priority grid with load counts
 │   ├── config/
-│   │   ├── crew.js              ← drivers, BP groups, rotations
-│   │   ├── plants.js            ← plant codes, outside help sets, subs
-│   │   └── distances.js         ← drive time matrix
-│   ├── utils/
-│   │   ├── shorthand.js         ← route generation engine
-│   │   └── rotation.js          ← rotation assignment logic
-│   └── components/              ← UI components (build out)
+│   │   ├── crew.js                  ← drivers, BP groups, rotations
+│   │   ├── plants.js                ← plant codes, outside help sets, subs
+│   │   └── distances.js             ← drive time matrix
+│   └── utils/
+│       ├── shorthand.js             ← route generation engine
+│       ├── rotation.js              ← rotation assignment logic
+│       └── loadCounter.js           ← load counting + priority scoring
 ├── SOPs/
 │   ├── service-efficiency.html
 │   ├── cleanliness-standards.html
 │   └── ...
-├── dashboard.html               ← management OS entry
-├── scripts/                     ← coaching tools, training
-├── personnel/                   ← performance tracking
-├── affirmations/                ← morning fire
+├── dashboard.html                   ← management OS entry
+├── dashboard-styles.css
+├── scripts/                         ← coaching tools, training
+├── personnel/                       ← performance tracking
+├── affirmations/                    ← morning fire
 └── docs/
-    └── master-plan.md           ← mega dashboard roadmap
+    └── master-plan.md               ← mega dashboard roadmap
 ```
 
 ---
 
 ## Session Log — Update This Every Session
 
-### 2026-03-14 — Session 1: Repo Bootstrap
+### Session 1: Repo Bootstrap — COMPLETE (2026-03-14)
 - [x] Created CLAUDE.md and README.md
 - [x] Defined load maximization strategy
 - [x] Mapped outside help vs block plant supply chain
@@ -269,28 +282,35 @@ MASTER-Scheduler-Dashboard-SRM/
 - [x] Update package.json (name, homepage) and vite.config.js (base path)
 - [x] Created docs/master-plan.md with phased roadmap
 - [x] npm install && npm run build — passes clean
-- [ ] Build load priority engine (block plants first)
-- [ ] Integrate SAMSARA data feeds
-- [ ] Build weekly load report (loads per plant, SRM vs outside)
 
-### 2026-03-14 — Session 2: Load Maximization Features
-- [x] Fixed CSS reference: created root styles.css for SOP/scripts/personnel/affirmations pages
-- [x] Created src/utils/loadCounter.js (countLoadsPerPlant, getPlantPriority, getSRMResponsibility)
-- [x] Created src/components/PlantDashboard.jsx — plant status grid with priority colors
-- [x] Wired PlantDashboard into App.jsx with PLANTS tab in crew tabs area
-- [x] Plant dashboard reacts to audibles (plant down) and day changes via shArgs
-- [x] Added "Management OS" link in dispatch footer → dashboard.html
-- [x] Added "Dispatch Router" link in dashboard.html footer → index.html
+### Session 2: Plant Dashboard + Load Counter — COMPLETE (2026-03-14)
+- [x] Created root styles.css (SOP/script/personnel/affirmation pages now load correctly)
+- [x] Built src/utils/loadCounter.js — extractPlantStops, countLoadsPerPlant, getPlantPriority, getSRMResponsibility, buildPlantReport
+- [x] Built src/components/PlantDashboard.jsx — RED/YELLOW/GREEN priority grid, block plant alerts, filter tabs, load summary
+- [x] Wired PlantDashboard as "PLANTS" pill in App.jsx header controls
+- [x] Added nav link: dispatch footer → dashboard.html (Management OS)
+- [x] Added nav link: dashboard.html footer → index.html (Dispatch Router)
+- [x] Updated srm-dispatch-router skill with outside help logic, corrected plant codes, updated driver info
+- [x] Route data generated from ALL_DRIVERS + buildShorthand, passed to PlantDashboard via useMemo
 - [x] npm run build passes clean
-- [ ] Load priority scoring engine (weight routes by plant need)
-- [ ] Route weight optimization (prefer block plant deliveries)
-- [ ] Weekly load report
 
-### Next Session Priorities
-1. Load priority scoring engine — weight routes by block plant urgency
-2. Route weight optimization — prefer block plant deliveries when routing
-3. Weekly fairness/load report (loads per plant, SRM vs outside, per driver)
-4. Update srm-dispatch-router skill with new outside help logic
+### Session 3 Priorities (NEXT)
+1. Load priority scoring engine — weighted scoring based on plant type + time of day + loads already delivered
+2. Route optimization suggestions — "Driver X could add a stop at 907 on the way back"
+3. Weekly load report — aggregate loads per plant Mon-Fri
+4. Print-friendly route sheet — one page per driver, clean layout
+
+### Session 4 (FUTURE)
+- SAMSARA GPS integration
+- Real-time truck position overlay
+- Automated ETA calculations
+- Weekly fairness report
+
+### Backlog
+- Talk-to-text order entry
+- Automated phone dispatch
+- Driver mobile app
+- Real-time truck overlay
 
 ---
 
@@ -299,11 +319,11 @@ MASTER-Scheduler-Dashboard-SRM/
 Governed by [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 
 Ship checklist:
-- [ ] Works offline on Pi
-- [ ] One-action UX (no multi-step friction)
-- [ ] Printable output option
-- [ ] Fairness logic intact
-- [ ] Block plants never starved
+- [x] Works offline on Pi
+- [x] One-action UX (no multi-step friction)
+- [ ] Printable output option (Session 3)
+- [x] Fairness logic intact
+- [x] Block plants never starved — PlantDashboard shows RED alert when 0 loads
 
 ---
 
@@ -319,4 +339,4 @@ MASTER-Scheduler-Dashboard-SRM
 
 ---
 
-*Last updated: 2026-03-14 · Session 1 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
+*Last updated: 2026-03-14 · Session 2 Complete · v1.2 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
