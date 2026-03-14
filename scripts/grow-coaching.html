@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROW Coaching Model | SRM Management OS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 30px; }
+        .header { text-align: center; border-bottom: 3px solid var(--srm-gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--srm-gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .grow-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px; }
+        .grow-letter { background: var(--srm-accent-blue); border: 2px solid var(--srm-gold); border-radius: 12px; padding: 20px; text-align: center; }
+        .grow-letter .letter { font-size: 3rem; color: var(--srm-gold); font-weight: bold; }
+        .grow-letter .word { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .phase { background: var(--srm-accent-blue); border-radius: 12px; padding: 25px; margin-bottom: 25px; border: 2px solid var(--srm-gold); }
+        .phase-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+        .phase-icon { background: var(--srm-gold); color: var(--srm-blue); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 2rem; }
+        .phase-info h2 { color: var(--srm-gold); margin: 0; font-size: 1.6rem; }
+        .phase-info p { margin: 5px 0 0 0; opacity: 0.9; }
+        .purpose-box { background: rgba(255,215,0,0.15); border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .purpose-box strong { color: var(--srm-gold); }
+        .questions-section h4 { color: var(--srm-gold); margin-bottom: 15px; font-size: 1.1rem; }
+        .question-grid { display: grid; gap: 10px; }
+        .question-item { background: rgba(0,45,98,0.5); border-radius: 8px; padding: 15px; position: relative; padding-left: 45px; }
+        .question-item:before { content: "?"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); background: var(--srm-gold); color: var(--srm-blue); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .tips-box { background: rgba(0,45,98,0.8); border-left: 4px solid var(--srm-gold); border-radius: 0 8px 8px 0; padding: 15px; margin-top: 20px; }
+        .tips-box h5 { color: var(--srm-gold); margin-bottom: 10px; }
+        .tips-box ul { margin: 0; padding-left: 20px; }
+        .tips-box li { padding: 5px 0; opacity: 0.9; }
+        .workflow { background: var(--srm-accent-blue); border-radius: 12px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--srm-gold); }
+        .workflow h3 { color: var(--srm-gold); text-align: center; margin-bottom: 20px; }
+        .workflow-steps { display: flex; justify-content: space-between; align-items: center; }
+        .workflow-step { text-align: center; flex: 1; }
+        .workflow-step .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .workflow-step .label { font-size: 0.9rem; color: var(--srm-gold); }
+        .workflow-arrow { color: var(--srm-gold); font-size: 2rem; }
+        .session-template { background: rgba(0,45,98,0.5); border-radius: 12px; padding: 25px; margin-top: 30px; border: 1px solid var(--srm-gold); }
+        .session-template h3 { color: var(--srm-gold); margin-bottom: 20px; }
+        .template-row { display: flex; gap: 20px; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .template-row:last-child { border-bottom: none; }
+        .template-label { color: var(--srm-gold); font-weight: bold; min-width: 120px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--srm-gold); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🌱 GROW COACHING MODEL</h1>
+            <p class="subtitle">Structured Framework for Performance Development</p>
+        </div>
+
+        <div class="grow-banner">
+            <div class="grow-letter">
+                <div class="letter">G</div>
+                <div class="word">Goal</div>
+            </div>
+            <div class="grow-letter">
+                <div class="letter">R</div>
+                <div class="word">Reality</div>
+            </div>
+            <div class="grow-letter">
+                <div class="letter">O</div>
+                <div class="word">Options</div>
+            </div>
+            <div class="grow-letter">
+                <div class="letter">W</div>
+                <div class="word">Will</div>
+            </div>
+        </div>
+
+        <div class="workflow">
+            <h3>Coaching Session Flow</h3>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="icon">🎯</div>
+                    <div class="label">Set Goal</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="icon">📍</div>
+                    <div class="label">Assess Reality</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="icon">💡</div>
+                    <div class="label">Explore Options</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="icon">✊</div>
+                    <div class="label">Commit to Will</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-icon">G</div>
+                <div class="phase-info">
+                    <h2>GOAL</h2>
+                    <p>Establish what the team member wants to achieve</p>
+                </div>
+            </div>
+            <div class="purpose-box">
+                <strong>Purpose:</strong> Define a clear, specific, measurable goal for this coaching session. The goal should be challenging yet achievable.
+            </div>
+            <div class="questions-section">
+                <h4>Key Questions to Ask:</h4>
+                <div class="question-grid">
+                    <div class="question-item">"What would you like to focus on today?"</div>
+                    <div class="question-item">"What does success look like for you in this area?"</div>
+                    <div class="question-item">"How will you know when you've achieved this goal?"</div>
+                    <div class="question-item">"What would achieving this mean to you and your career?"</div>
+                    <div class="question-item">"Is this goal within your control to achieve?"</div>
+                </div>
+            </div>
+            <div class="tips-box">
+                <h5>💡 Coach Tips</h5>
+                <ul>
+                    <li>Ensure the goal is SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</li>
+                    <li>Let the team member define their own goal - don't impose yours</li>
+                    <li>Align personal goals with team/company objectives</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-icon">R</div>
+                <div class="phase-info">
+                    <h2>REALITY</h2>
+                    <p>Understand the current situation and context</p>
+                </div>
+            </div>
+            <div class="purpose-box">
+                <strong>Purpose:</strong> Assess where the team member currently stands in relation to their goal. Identify obstacles, resources, and relevant factors.
+            </div>
+            <div class="questions-section">
+                <h4>Key Questions to Ask:</h4>
+                <div class="question-grid">
+                    <div class="question-item">"Where are you now in relation to your goal?"</div>
+                    <div class="question-item">"What have you tried so far? What happened?"</div>
+                    <div class="question-item">"What obstacles are you facing?"</div>
+                    <div class="question-item">"What resources do you have available to you?"</div>
+                    <div class="question-item">"On a scale of 1-10, how would you rate your current performance in this area?"</div>
+                    <div class="question-item">"What's working well that you can build on?"</div>
+                </div>
+            </div>
+            <div class="tips-box">
+                <h5>💡 Coach Tips</h5>
+                <ul>
+                    <li>Be objective and non-judgmental</li>
+                    <li>Use open-ended questions to encourage reflection</li>
+                    <li>Help identify blind spots they may not see</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-icon">O</div>
+                <div class="phase-info">
+                    <h2>OPTIONS</h2>
+                    <p>Generate possible solutions and strategies</p>
+                </div>
+            </div>
+            <div class="purpose-box">
+                <strong>Purpose:</strong> Brainstorm all possible options for moving forward. Encourage creative thinking and explore multiple paths to the goal.
+            </div>
+            <div class="questions-section">
+                <h4>Key Questions to Ask:</h4>
+                <div class="question-grid">
+                    <div class="question-item">"What options do you have?"</div>
+                    <div class="question-item">"What else could you do?"</div>
+                    <div class="question-item">"If there were no limitations, what would you try?"</div>
+                    <div class="question-item">"What would someone you admire do in this situation?"</div>
+                    <div class="question-item">"What are the pros and cons of each option?"</div>
+                    <div class="question-item">"Which option excites you the most?"</div>
+                </div>
+            </div>
+            <div class="tips-box">
+                <h5>💡 Coach Tips</h5>
+                <ul>
+                    <li>Don't evaluate options too quickly - quantity first</li>
+                    <li>Encourage "What if..." thinking</li>
+                    <li>Offer your ideas only after they've exhausted theirs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-icon">W</div>
+                <div class="phase-info">
+                    <h2>WILL / WAY FORWARD</h2>
+                    <p>Commit to specific actions and accountability</p>
+                </div>
+            </div>
+            <div class="purpose-box">
+                <strong>Purpose:</strong> Convert insights into action. Establish specific commitments, timelines, and accountability measures.
+            </div>
+            <div class="questions-section">
+                <h4>Key Questions to Ask:</h4>
+                <div class="question-grid">
+                    <div class="question-item">"Which option will you pursue?"</div>
+                    <div class="question-item">"What specifically will you do? By when?"</div>
+                    <div class="question-item">"On a scale of 1-10, how committed are you to this action?"</div>
+                    <div class="question-item">"What might get in the way? How will you handle it?"</div>
+                    <div class="question-item">"What support do you need from me or others?"</div>
+                    <div class="question-item">"How should we follow up on your progress?"</div>
+                </div>
+            </div>
+            <div class="tips-box">
+                <h5>💡 Coach Tips</h5>
+                <ul>
+                    <li>If commitment is below 7, revisit the options</li>
+                    <li>Schedule the follow-up before ending the session</li>
+                    <li>Document the commitments in writing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="session-template">
+            <h3>📝 Coaching Session Template</h3>
+            <div class="template-row">
+                <div class="template-label">Employee:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Date:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Goal:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Current Reality:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Options Explored:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Committed Actions:</div>
+                <div>_________________________________</div>
+            </div>
+            <div class="template-row">
+                <div class="template-label">Follow-up Date:</div>
+                <div>_________________________________</div>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.7; font-style: italic;">
+            "Great leaders don't create followers, they create more leaders."
+        </p>
+    </div>
+</body>
+</html>

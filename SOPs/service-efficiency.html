@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10-Minute Load SOP | SRM Management OS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 30px; }
+        .header { text-align: center; border-bottom: 3px solid var(--srm-gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--srm-gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .metric-banner { background: linear-gradient(135deg, var(--srm-accent-blue), var(--srm-blue)); border: 2px solid var(--srm-gold); border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 30px; }
+        .metric-banner .time { font-size: 4rem; color: var(--srm-gold); font-weight: bold; }
+        .metric-banner .label { font-size: 1.3rem; }
+        .phase { background: var(--srm-accent-blue); border-left: 4px solid var(--srm-gold); border-radius: 0 8px 8px 0; padding: 20px; margin-bottom: 20px; }
+        .phase-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .phase-number { background: var(--srm-gold); color: var(--srm-blue); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .phase-title { color: var(--srm-gold); font-size: 1.4rem; font-weight: bold; }
+        .phase-time { color: var(--srm-gold); font-size: 0.9rem; margin-left: auto; background: rgba(255,215,0,0.2); padding: 5px 12px; border-radius: 15px; }
+        .checklist { list-style: none; padding: 0; }
+        .checklist li { padding: 10px 0; padding-left: 30px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .checklist li:before { content: "✓"; position: absolute; left: 0; color: var(--srm-gold); font-weight: bold; }
+        .alert-box { background: rgba(255,215,0,0.15); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 20px; margin-top: 30px; }
+        .alert-box h3 { color: var(--srm-gold); margin-bottom: 10px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--srm-gold); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
+        .kpi-item { background: var(--srm-accent-blue); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 15px; text-align: center; }
+        .kpi-item .value { font-size: 1.8rem; color: var(--srm-gold); font-weight: bold; }
+        .kpi-item .label { font-size: 0.85rem; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🚛 10-MINUTE LOAD SOP</h1>
+            <p class="subtitle">Service Efficiency Standard Operating Procedure</p>
+        </div>
+
+        <div class="metric-banner">
+            <div class="time">10:00</div>
+            <div class="label">Maximum Load Time Target</div>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-number">1</div>
+                <div class="phase-title">Pre-Arrival Preparation</div>
+                <div class="phase-time">0:00 - 2:00</div>
+            </div>
+            <ul class="checklist">
+                <li>Batch ticket reviewed and verified before truck arrival</li>
+                <li>Materials staged and hoppers confirmed ready</li>
+                <li>Mixer truck inspection completed (cleanliness check)</li>
+                <li>Communication with driver on load specifications</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-number">2</div>
+                <div class="phase-title">Loading Sequence</div>
+                <div class="phase-time">2:00 - 7:00</div>
+            </div>
+            <ul class="checklist">
+                <li>Truck positioned under batch plant</li>
+                <li>Batch initiated immediately upon positioning</li>
+                <li>Water and admixtures added per specification</li>
+                <li>Aggregate and cement loaded in proper sequence</li>
+                <li>Drum rotation confirmed at proper RPM</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-number">3</div>
+                <div class="phase-title">Final Verification & Dispatch</div>
+                <div class="phase-time">7:00 - 10:00</div>
+            </div>
+            <ul class="checklist">
+                <li>Load ticket printed and verified</li>
+                <li>Slump test performed if required</li>
+                <li>Driver briefed on delivery instructions</li>
+                <li>Truck cleared for departure</li>
+                <li>Time logged in dispatch system</li>
+            </ul>
+        </div>
+
+        <div class="alert-box">
+            <h3>⚠️ Critical Standards</h3>
+            <ul class="checklist">
+                <li>Any load exceeding 10 minutes requires immediate supervisor notification</li>
+                <li>Equipment failures must be reported and logged before end of shift</li>
+                <li>No truck leaves without completed inspection checklist</li>
+                <li>Customer wait time is our #1 service metric</li>
+            </ul>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-item">
+                <div class="value">&lt;10min</div>
+                <div class="label">Target Load Time</div>
+            </div>
+            <div class="kpi-item">
+                <div class="value">95%</div>
+                <div class="label">On-Time Goal</div>
+            </div>
+            <div class="kpi-item">
+                <div class="value">0</div>
+                <div class="label">Tolerance for Delays</div>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.7; font-style: italic;">
+            "If you aren't busy doing something, get busy!"
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+:root {
+  --srm-blue: #002D62;
+  --srm-accent-blue: #004A99;
+  --srm-gold: #FFD700;
+  --text-white: #FFFFFF;
+}
+body {
+  background-color: var(--srm-blue);
+  color: var(--text-white);
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: var(--srm-accent-blue);
+  border: 1px solid var(--srm-gold);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.metric-highlight {
+  color: var(--srm-gold);
+  font-size: 2.5rem;
+  font-weight: bold;
+}

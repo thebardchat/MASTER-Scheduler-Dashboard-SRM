@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRM Management OS | Elite Operations Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .main-header { text-align: center; padding: 40px 20px; margin-bottom: 40px; border-bottom: 3px solid var(--srm-gold); }
+        .logo { font-size: 3.5rem; color: var(--srm-gold); font-weight: bold; letter-spacing: 3px; margin-bottom: 10px; }
+        .tagline { font-size: 1.3rem; opacity: 0.9; margin-bottom: 20px; }
+        .mission { background: var(--srm-accent-blue); border: 2px solid var(--srm-gold); border-radius: 8px; padding: 15px 25px; display: inline-block; }
+        .mission-text { font-style: italic; }
+
+        /* Values Bar */
+        .values-bar { display: flex; justify-content: center; gap: 30px; margin: 30px 0; flex-wrap: wrap; }
+        .value-item { display: flex; align-items: center; gap: 8px; background: rgba(255,215,0,0.1); padding: 10px 20px; border-radius: 25px; border: 1px solid var(--srm-gold); }
+        .value-item .icon { font-size: 1.3rem; }
+        .value-item .text { color: var(--srm-gold); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Dashboard Grid */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin-bottom: 40px; }
+
+        /* Section Cards */
+        .section-card { background: var(--srm-accent-blue); border: 2px solid var(--srm-gold); border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+        .section-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,215,0,0.2); }
+        .section-header { background: linear-gradient(135deg, var(--srm-gold), #FFA500); padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .section-header .icon { font-size: 2rem; }
+        .section-header h2 { color: var(--srm-blue); font-size: 1.4rem; margin: 0; }
+        .section-content { padding: 20px; }
+        .section-desc { opacity: 0.9; margin-bottom: 20px; line-height: 1.6; }
+
+        /* Link List */
+        .link-list { list-style: none; }
+        .link-list li { margin-bottom: 10px; }
+        .link-list a { display: flex; align-items: center; gap: 10px; padding: 12px 15px; background: rgba(0,45,98,0.5); border-radius: 8px; color: #fff; text-decoration: none; transition: all 0.3s; border: 1px solid transparent; }
+        .link-list a:hover { background: rgba(255,215,0,0.15); border-color: var(--srm-gold); }
+        .link-list a .arrow { color: var(--srm-gold); margin-left: auto; }
+        .link-list a .link-icon { color: var(--srm-gold); }
+
+        /* Mantra Banner */
+        .mantra-banner { background: linear-gradient(135deg, var(--srm-gold), #FFA500); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }
+        .mantra-banner .text { color: var(--srm-blue); font-size: 1.8rem; font-weight: bold; }
+
+        /* Quick Stats */
+        .quick-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
+        .stat-card { background: var(--srm-accent-blue); border: 1px solid var(--srm-gold); border-radius: 8px; padding: 20px; text-align: center; }
+        .stat-card .number { font-size: 2.5rem; color: var(--srm-gold); font-weight: bold; }
+        .stat-card .label { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Footer */
+        .footer { text-align: center; padding: 30px; border-top: 1px solid rgba(255,215,0,0.3); margin-top: 40px; }
+        .footer .brand { color: var(--srm-gold); font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; }
+        .footer .copyright { opacity: 0.7; font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .quick-stats { grid-template-columns: repeat(2, 1fr); }
+            .values-bar { gap: 15px; }
+            .logo { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo">SRM MANAGEMENT OS</div>
+            <p class="tagline">Elite Operations Hub for North Alabama's Best</p>
+            <div class="mission">
+                <span class="mission-text">"To be the best ready-mix provider in North Alabama."</span>
+            </div>
+        </header>
+
+        <div class="values-bar">
+            <div class="value-item">
+                <span class="icon">🤝</span>
+                <span class="text">Service</span>
+            </div>
+            <div class="value-item">
+                <span class="icon">✨</span>
+                <span class="text">Cleanliness</span>
+            </div>
+            <div class="value-item">
+                <span class="icon">💪</span>
+                <span class="text">Labor</span>
+            </div>
+            <div class="value-item">
+                <span class="icon">👑</span>
+                <span class="text">Leadership</span>
+            </div>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="number">10</div>
+                <div class="label">Min Load Target</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">0</div>
+                <div class="label">Tolerance Policy</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">14</div>
+                <div class="label">Day Trial Period</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">100%</div>
+                <div class="label">Excellence Standard</div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <!-- SOPs Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">📋</span>
+                    <h2>Standard Operating Procedures</h2>
+                </div>
+                <div class="section-content">
+                    <p class="section-desc">Critical procedures that define our operational excellence and service standards.</p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="SOPs/service-efficiency.html">
+                                <span class="link-icon">🚛</span>
+                                <span>10-Minute Load SOP</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="SOPs/cleanliness-standards.html">
+                                <span class="link-icon">🧹</span>
+                                <span>Zero-Tolerance Cleanliness SOP</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Scripts Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">📝</span>
+                    <h2>Leadership Scripts</h2>
+                </div>
+                <div class="section-content">
+                    <p class="section-desc">Structured frameworks for hiring top talent and developing your team.</p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="scripts/game-plan-interview.html">
+                                <span class="link-icon">🎯</span>
+                                <span>Game Plan Interview Script</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="scripts/grow-coaching.html">
+                                <span class="link-icon">🌱</span>
+                                <span>GROW Coaching Model</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Personnel Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">👥</span>
+                    <h2>Personnel Management</h2>
+                </div>
+                <div class="section-content">
+                    <p class="section-desc">Tools for tracking performance and ensuring we hire and retain elite team members.</p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="personnel/performance-audit.html">
+                                <span class="link-icon">📊</span>
+                                <span>14-Day Trial Tracker</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Affirmations Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">🔥</span>
+                    <h2>Daily Affirmations</h2>
+                </div>
+                <div class="section-content">
+                    <p class="section-desc">Start your day with purpose. Spiritual and leadership focus for peak performance.</p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="affirmations/morning-fire.html">
+                                <span class="link-icon">✝️</span>
+                                <span>Morning Fire Affirmations</span>
+                                <span class="arrow">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mantra-banner">
+            <p class="text">"If you aren't busy doing something, GET BUSY!"</p>
+        </div>
+
+        <footer class="footer">
+            <div class="brand">SRM Management OS</div>
+            <p class="copyright">Elite Operations • North Alabama's Best Ready-Mix Provider</p>
+        </footer>
+    </div>
+</body>
+</html>
