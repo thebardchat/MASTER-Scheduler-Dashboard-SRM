@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback, Fragment } from "react"
+import { useState, useEffect, useCallback, useMemo, Fragment } from "react"
 import { ALL_DRIVERS, CREW_TABS, BP_GROUPS } from './config/crew.js'
 import { ALL_PLANTS, SUBS } from './config/plants.js'
 import { getCycleDay, getBPGroup, getBPDrivers, driverBPDay, getBPCalendar, isTueFri } from './utils/rotation.js'
 import { buildShorthand } from './utils/shorthand.js'
 import { addMinutes } from './config/distances.js'
+import PlantDashboard from './components/PlantDashboard.jsx'
 
 /* ═══════════════════════════════════════════════════════════════
    Anthropic-Inspired Design System
@@ -81,7 +82,7 @@ function RouteSteps({ text, driverClr }) {
   const colonIdx = text.indexOf(':')
   if (colonIdx === -1) return <span style={{ color:T.text2, fontFamily:T.mono, fontSize:'11px' }}>{text}</span>
 
-  const rawSteps = text.substring(colonIdx + 1).trim().split('→')
+  const rawSteps = text.substring(colonIdx + 1).trim().split('\u2192')
 
   return (
     <div style={{ display:'flex', flexWrap:'wrap', gap:'3px 2px', alignItems:'center' }}>
@@ -300,6 +301,14 @@ export default function App() {
 
   const shArgs = { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides }
 
+  /* ── Generate all routes for PlantDashboard ── */
+  const allRoutes = useMemo(() => {
+    return ALL_DRIVERS.map(driver => ({
+      name: driver.name,
+      route: buildShorthand(driver.name, shArgs),
+    }))
+  }, [tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides])
+
   /* ═══════════════════════════════════════════════════════════
      RENDER
      ═══════════════════════════════════════════════════════════ */
@@ -390,6 +399,8 @@ export default function App() {
               <Pill label="CURTIS OFFICE" active={curtisOffice} color={T.amber} onClick={() => setCurtisOffice(p=>!p)} small />
               <Pill label={`AUDIBLES${down.size?` (${down.size})`:""}`}
                     active={view==="AUDIBLES"} color={T.red} onClick={() => setView(v=>v==="AUDIBLES"?"ROUTES":"AUDIBLES")} small />
+              <Pill label="PLANTS"
+                    active={view==="PLANTS"} color={T.green} onClick={() => setView(v=>v==="PLANTS"?"ROUTES":"PLANTS")} small />
               <Pill label="BP CALENDAR"
                     active={view==="CALENDAR"} color={T.blue} onClick={() => setView(v=>v==="CALENDAR"?"ROUTES":"CALENDAR")} small />
             </div>
@@ -406,7 +417,7 @@ export default function App() {
           const col = TAB_CLR[t]
           const active = crew === t
           return (
-            <button key={t} onClick={() => { setCrew(t); setView("ROUTES") }} style={{
+            <button key={t} onClick={() => { setCrew(t); if(view==="PLANTS"||view==="CALENDAR") {} else setView("ROUTES") }} style={{
               background: active ? `${col}15` : 'transparent',
               border: 'none', borderBottom: active ? `2px solid ${col}` : '2px solid transparent',
               color: active ? col : T.text3,
@@ -418,8 +429,15 @@ export default function App() {
             </button>
           )
         })}
-        <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>TAP CARD TO COPY</span>
+        <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>
+          {view === "PLANTS" ? "PLANT LOAD STATUS" : "TAP CARD TO COPY"}
+        </span>
       </div>
+
+      {/* ═══ PLANTS DASHBOARD ═══ */}
+      {view==="PLANTS" && (
+        <PlantDashboard routes={allRoutes} dateStr={DATE_STR} />
+      )}
 
       {/* ═══ AUDIBLES PANEL ═══ */}
       {view==="AUDIBLES" && (
@@ -701,11 +719,15 @@ export default function App() {
         <span style={{ fontSize:'9px', color:T.text4, letterSpacing:'0.5px' }}>
           SRM DISPATCH \u00b7 SRM CONCRETE \u00b7 HAZEL GREEN AL
         </span>
+        <a href="dashboard.html" style={{
+          fontSize:'9px', color:T.brand, textDecoration:'none', letterSpacing:'0.5px',
+          padding:'3px 10px', border:`1px solid ${T.brandBd}`, borderRadius:'99px',
+        }}>MANAGEMENT OS {'\u2192'}</a>
         <span style={{ fontSize:'8px', color:T.text4 }}>
           MH=Mt. Hope \u00b7 RG=Rogers Group \u00b7 MM=Martin Marietta \u00b7 LQ=Lacey Spring \u00b7 BP=Bridgeport
         </span>
         <span style={{ fontSize:'8px', color:T.text4 }}>
-          Powered by Claude \u00b7 thebardchat/srm-dispatch
+          Powered by Claude \u00b7 thebardchat/MASTER-Scheduler-Dashboard-SRM
         </span>
       </div>
     </div>
