@@ -1,13 +1,13 @@
 This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 # CLAUDE.md — MASTER-Scheduler-Dashboard-SRM
-### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.1
-### Last Session: 2026-03-14 (Session 1 COMPLETE)
+### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.0
+### Last Session: 2026-03-14
 
 ---
 
 ## What This Repo Is
 
-Master monorepo combining SRM Concrete's dispatch routing engine, management dashboard, SOPs, and scheduling tools into a single deployable system. Replaces scattered repos (`srm-dispatch`, `SB-Management-OS`) with one source of truth.
+Master monorepo combining SRM Concrete's dispatch routing engine, management dashboard, SOPs, and scheduling tools into a single deployable system. Replaces scattered repos (`srm-dispatch`, `srm-management-os`) with one source of truth.
 
 **Primary goal:** Maximize aggregate loads delivered to plants by SRM fleet trucks, accounting for which plants receive outside hauler help and which (block plants) must be supplied exclusively by SRM drivers.
 
@@ -28,6 +28,8 @@ Master monorepo combining SRM Concrete's dispatch routing engine, management das
 
 ### Outside Help Matrix
 
+Plants that receive aggregate deliveries from **outside haulers** (not SRM fleet):
+
 | Plant | Outside Material | What SRM Still Supplies |
 |-------|-----------------|------------------------|
 | 507 Stringfield | Sand | Rock (67s, 78s) |
@@ -45,7 +47,7 @@ Master monorepo combining SRM Concrete's dispatch routing engine, management das
 
 ### Routing Priority Order
 1. Block plants (907, 908) — zero outside help, SRM fleet is their only source
-2. Plants with partial outside help — fill gaps outside haulers miss
+2. Plants with partial outside help — fill gaps outside haulers miss (rock to sand-covered plants, sand to rock-covered plants)
 3. Full-service plants (506, 511, 513, 514, 519) — SRM supplies everything
 4. Scrap runs every morning — generates backhaul rock, cleans yards
 5. No empty trucks — every leg carries material
@@ -61,19 +63,39 @@ Master monorepo combining SRM Concrete's dispatch routing engine, management das
 | Tim | 519 | 05:00 | Dump trailer breaks often → runs triaxle as backup |
 
 ### Crew 507 (Huntsville/North)
-Marcus 05:00 A · Brittany 05:00 A · Eboni 05:00 B · Deletra 04:00 B
+| Driver | Start | BP Group |
+|--------|-------|----------|
+| Marcus | 05:00 | A |
+| Brittany | 05:00 | A |
+| Eboni | 05:00 | B |
+| Deletra | 04:00 | B |
 
 ### Crew 519 (Muscle Shoals/Central)
-Charlie 04:15 A · Bryant 04:30 B · Jamie 04:30 C · Eddie 04:00 C
+| Driver | Start | BP Group |
+|--------|-------|----------|
+| Charlie | 04:15 | A |
+| Bryant | 04:30 | B |
+| Jamie | 05:00 | C |
+| Eddie | 05:00 | C |
 
 ### Crew 506 (Decatur/West-Central)
-Kenny 05:00 A · Jimmy 05:00 B · Roberto 04:00 C · Jonathon 04:15 C
+| Driver | Start | BP Group |
+|--------|-------|----------|
+| Kenny | 05:00 | A |
+| Jimmy | 05:00 | B |
+| Roberto | 04:00 | C |
+| Jonathon | 04:15 | C |
 
 ### Fixed Bridgeport
-Stacey 04:00 (always BP) · Alexis 08:00 (516 base, dual-round, short day)
+| Driver | Start | Notes |
+|--------|-------|-------|
+| Stacey | 04:00 | Always on BP rotation |
+| Alexis | 07:00 | 516 base, dual-round RG/MM routes |
 
 ### Dispatch Manager
-Curtis — Office/dispatch, drives 525 coverage when needed
+| Name | Role |
+|------|------|
+| Curtis | Office/dispatch, drives 525 coverage when needed |
 
 ---
 
@@ -82,47 +104,94 @@ Curtis — Office/dispatch, drives 525 coverage when needed
 ### Concrete Plants
 | Code | Name | Zone | Outside Help |
 |------|------|------|-------------|
-| 506 | Decatur | Central | None |
+| 506 | Decatur | Central | None — SRM full service |
 | 507 | Stringfield | North | Outside SAND |
 | 508 | Nick Fitcheard | North | Outside SAND |
-| 511 | Palmer | North | None |
-| 513 | Greenbrier | North | None |
-| 514 | Arab | East-Central | None |
+| 511 | Palmer | North | None — SRM full service |
+| 513 | Greenbrier | North | None — SRM full service |
+| 514 | Arab | East-Central | None — SRM full service |
 | 516 | Lacey Spring | East-Central | Outside ROCK |
 | 518 | Scottsboro | Far East | Outside SAND |
-| 519 | Muscle Shoals | Central | None |
+| 519 | Muscle Shoals | Central | None — SRM full service |
 | 525 | Cullman | South | Outside SAND |
 | 907 | Palmer Block | North | **NONE — MUST SUPPLY** |
 | 908 | Block Plant | North | **NONE — MUST SUPPLY** |
 
 ### Quarries & Sources
-591 Mt. Hope (MH) · 594 Cherokee RQ · 502 Bridgeport (BP) · POD Port of Decatur
-MM Martin Marietta · RG Rogers Group · APAC Tremont · MSAND Monteagle Sand
+| Code | Name | Materials |
+|------|------|-----------|
+| 591 | Mt. Hope (MH) | 67s rock, scrap drop |
+| 594 | Cherokee RQ (CHER) | 67s rock, scrap drop (good/bad piles) |
+| 502 | Bridgeport (BP) | 1/4 downs for block plants |
+| POD | Port of Decatur | Pine Bluff Sand |
+| MM | Martin Marietta | 78s rock (Huntsville) |
+| RG | Rogers Group | 67s rock (near Lacey Spring) |
+| APAC | APAC Tremont | Sand for block plants (CHRIS P route) |
+| MSAND | Monteagle Sand | Long haul north (CHRIS P route) |
+
+---
+
+## Drive Time Matrix (minutes, one-way loaded)
+
+Key routes for load planning:
+```
+MH→506: 30    MH→511: 40    MH→513: 35    MH→507: 70    MH→519: 20
+MH→525: 45    MH→907: 45    MH→594: 40    MH→514: 80    MH→516: 80
+POD→506: 10   POD→511: 20   POD→513: 15   POD→507: 75   POD→519: 55
+BP→518: 25    BP→907: 200   BP→511: 200
+516→RG: 1     507→MM: 1     514→RG: 20    RG→507: 25
+```
 
 ---
 
 ## Route Logic Engine
 
-### Key Files
-- `src/utils/shorthand.js` — route generation (buildShorthand, p, after514, endOfShift519, bpFirstRock, check518)
-- `src/utils/rotation.js` — BP cycling, calendar, cycle day
-- `src/config/crew.js` — 16 drivers, BP groups A/B/C, rotations, tabs
-- `src/config/plants.js` — 19 locations, OUTSIDE_SAND/ROCK sets, SUBS map
-- `src/config/distances.js` — drive time matrix, quarry close logic (960 min = 4PM)
+### Shorthand System (`src/utils/shorthand.js`)
+Generates text-based route cards per driver. Core functions:
+- `buildShorthand(name, options)` — master route builder
+- `p(code, down, subMap)` — plant substitution when a plant is down
+- `after514(homePlant, down, subMap)` — 514 chain rule (sand→514→scrap→LQ→RG rock→home)
+- `endOfShift519()` — time-aware route shortening near quarry close
+- `bpFirstRock()` — rotating BP first-rock delivery plant
+- `check518()` — call Shane/Anthony before sending to 518
 
-### Key Config Sets
-- `OUTSIDE_SAND`: `["507","508","525","518"]`
-- `OUTSIDE_ROCK`: `["516"]`
-- `SAND_TARGETS`: `["519","506","511","513","514","516"]`
-- `SUBS`: fallback map when plant DOWN (907/908 have NO subs — alert Shane)
+### Rotation System (`src/config/crew.js`)
+- **BP Groups A/B/C** rotate on `cycleDay % 3`
+- **507 Rota:** `["506","511","513","507","514"]`
+- **506 Rota:** `["511","513","514","506"]`
+- **Tuesday/Friday overrides:** Special BP + block plant supply runs
+
+### Plant Substitution (`src/config/plants.js`)
+When a plant is DOWN, `SUBS` map provides fallback:
+```
+506→[511,513,508]  507→[508,511,513]  511→[513,506,507]
+513→[511,506,507]  514→[516,519,513]  516→[514,519,513]
+519→[514,516,511]  525→[514,516,519]  591→[594]  594→[591]
+```
 
 ---
 
 ## Tech Stack
-React 18 + Vite 5 · Vanilla CSS · Client-side only · PWA (offline) · GitHub Pages + Pi 5 LAN
 
-## Hardware
-Pi 5 16GB (`10.0.0.42` / `100.67.120.6`) · Pironman 5-MAX RAID 1 · Pulsar0100 (`100.81.70.117`) · SAMSARA incoming
+| Layer | Tech |
+|-------|------|
+| Framework | React 18 + Vite 5 |
+| UI | Vanilla CSS, mobile-first |
+| State | Client-side only |
+| PWA | vite-plugin-pwa, offline-capable |
+| Deploy | GitHub Pages (`thebardchat.github.io/srm-dispatch`) |
+| Local | Pi 5 at `http://10.0.0.42:3031` |
+
+---
+
+## Hardware Context
+
+| Device | Role | Address |
+|--------|------|---------|
+| Raspberry Pi 5 (16GB) | Local dev + LAN hosting | `100.67.120.6` Tailscale / `10.0.0.42` LAN |
+| Pironman 5-MAX | NVMe RAID 1 chassis | 2× WD Blue SN5000 2TB |
+| Pulsar0100 | N8N bridge / dev workstation | `100.81.70.117` |
+| SAMSARA (incoming) | GPS/telematics on all trucks | Integration TBD |
 
 **Project Path:** `/mnt/shanebrain-raid/shanebrain-core/MASTER-Scheduler-Dashboard-SRM/`
 
@@ -130,59 +199,124 @@ Pi 5 16GB (`10.0.0.42` / `100.67.120.6`) · Pironman 5-MAX RAID 1 · Pulsar0100 
 
 ## Business Rules — Do Not Break
 
-- Block plants (907, 908) supplied FIRST — zero outside help
-- No empty trucks — every leg carries material
-- CHRIS P route FIXED — never touch
-- Dump trailer drivers never do scrap runs
-- BP rotation fair — groups A/B/C, Stacey+Alexis fixed
-- 514 chain rule — sand→514→scrap→LQ→RG rock→home
-- Tuesday/Friday overrides — special BP+block supply runs
-- Check 518 before sending — call Shane/Anthony
-- Quarry close 4PM enforced — routes shorten near end of shift
-- No same zone >2 consecutive days
+| Rule | Why |
+|------|-----|
+| Block plants (907, 908) get supplied FIRST | Zero outside help — they starve without SRM fleet |
+| No empty trucks | Every leg carries material — scrap out, rock back |
+| CHRIS P route is FIXED | Never touch: CHER→MSAND→Tupelo→APAC→511→POD→519→PRELOAD |
+| Dump trailer drivers (Chris P, Tim) NEVER do scrap runs | Equipment incompatibility |
+| Bridgeport rotation is FAIR | Max 1x/week per driver, groups A/B/C rotate, Stacey+Alexis fixed |
+| 514 chain rule | Delivering to 514 triggers scrap→LQ→RG rock→home chain |
+| Tuesday/Friday overrides | Special BP+block supply runs for 507 and 519 crews |
+| Check 518 before sending material | Call Shane (256-402-5176) or Anthony (256-924-4328) |
+| Quarry close time enforced | End-of-shift routes shorten when time is tight |
+| Zone rotation — no same zone >2 days | Prevents driver burnout |
 
 ---
 
-## Session Log
+## Design Constraints
 
-### Session 1: Repo Bootstrap ✅ COMPLETE (2026-03-14)
-- [x] CLAUDE.md + README.md
-- [x] Load maximization strategy defined
-- [x] srm-dispatch source merged
-- [x] SB-Management-OS content merged
-- [x] 908 added to plants.js
-- [x] package.json + vite.config.js updated
-- [x] docs/master-plan.md created
-- [x] Build passes clean
+- **ADHD-aware:** One screen, next action always obvious
+- **Mobile-first:** Shane uses phone in the yard
+- **Offline-capable:** Must work on Pi LAN with no internet
+- **Print-friendly:** Drivers need physical route sheets
+- **Copy-to-clipboard:** Tap route card → copies text for SMS dispatch
 
-### Session 2 Priorities (NEXT)
-1. Create root `styles.css` (SOP pages reference it, missing)
-2. Build PlantDashboard.jsx — per-plant priority view (RED/YELLOW/GREEN)
-3. Build loadCounter.js — count route stops per plant
-4. Wire Plant Dashboard as "PLANTS" tab in App.jsx
-5. Nav links between dispatch UI ↔ management OS
-6. Update srm-dispatch-router skill
+---
 
-### Session 3 (FUTURE)
-- Load priority scoring engine
-- Route optimization suggestions
-- Weekly load report
-- Print-friendly route sheet
+## Repo Structure (Target)
 
-### Backlog
-- SAMSARA GPS · Talk-to-text · Automated phone dispatch · Driver mobile app · Real-time truck overlay
+```
+MASTER-Scheduler-Dashboard-SRM/
+├── CLAUDE.md                    ← you are here
+├── README.md
+├── package.json
+├── vite.config.js
+├── index.html
+├── src/
+│   ├── App.jsx                  ← main dispatch UI
+│   ├── config/
+│   │   ├── crew.js              ← drivers, BP groups, rotations
+│   │   ├── plants.js            ← plant codes, outside help sets, subs
+│   │   └── distances.js         ← drive time matrix
+│   ├── utils/
+│   │   ├── shorthand.js         ← route generation engine
+│   │   └── rotation.js          ← rotation assignment logic
+│   └── components/              ← UI components (build out)
+├── SOPs/
+│   ├── service-efficiency.html
+│   ├── cleanliness-standards.html
+│   └── ...
+├── dashboard.html               ← management OS entry
+├── scripts/                     ← coaching tools, training
+├── personnel/                   ← performance tracking
+├── affirmations/                ← morning fire
+└── docs/
+    └── master-plan.md           ← mega dashboard roadmap
+```
+
+---
+
+## Session Log — Update This Every Session
+
+### 2026-03-14 — Session 1: Repo Bootstrap
+- [x] Created CLAUDE.md and README.md
+- [x] Defined load maximization strategy
+- [x] Mapped outside help vs block plant supply chain
+- [x] Migrate srm-dispatch source into this repo
+- [x] Migrate srm-management-os content (SOPs, personnel, scripts, affirmations, dashboard.html)
+- [x] Add 908 block plant to plant config (ALL_PLANTS + SUBS)
+- [x] Update package.json (name, homepage) and vite.config.js (base path)
+- [x] Created docs/master-plan.md with phased roadmap
+- [x] npm install && npm run build — passes clean
+- [ ] Build load priority engine (block plants first)
+- [ ] Integrate SAMSARA data feeds
+- [ ] Build weekly load report (loads per plant, SRM vs outside)
+
+### 2026-03-14 — Session 2: Load Maximization Features
+- [x] Fixed CSS reference: created root styles.css for SOP/scripts/personnel/affirmations pages
+- [x] Created src/utils/loadCounter.js (countLoadsPerPlant, getPlantPriority, getSRMResponsibility)
+- [x] Created src/components/PlantDashboard.jsx — plant status grid with priority colors
+- [x] Wired PlantDashboard into App.jsx with PLANTS tab in crew tabs area
+- [x] Plant dashboard reacts to audibles (plant down) and day changes via shArgs
+- [x] Added "Management OS" link in dispatch footer → dashboard.html
+- [x] Added "Dispatch Router" link in dashboard.html footer → index.html
+- [x] npm run build passes clean
+- [ ] Load priority scoring engine (weight routes by plant need)
+- [ ] Route weight optimization (prefer block plant deliveries)
+- [ ] Weekly load report
+
+### Next Session Priorities
+1. Load priority scoring engine — weight routes by block plant urgency
+2. Route weight optimization — prefer block plant deliveries when routing
+3. Weekly fairness/load report (loads per plant, SRM vs outside, per driver)
+4. Update srm-dispatch-router skill with new outside help logic
 
 ---
 
 ## Constitutional Alignment
+
 Governed by [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 
-- [x] Works offline on Pi
-- [x] One-action UX
-- [ ] Printable output
-- [x] Fairness logic intact
-- [ ] Block plants never starved (Session 2)
+Ship checklist:
+- [ ] Works offline on Pi
+- [ ] One-action UX (no multi-step friction)
+- [ ] Printable output option
+- [ ] Fairness logic intact
+- [ ] Block plants never starved
 
 ---
 
-*Last updated: 2026-03-14 · Session 1 Complete · v1.1*
+## Ecosystem Position
+
+```
+MASTER-Scheduler-Dashboard-SRM
+  ├── Dispatch Router (daily routes, load maximization)
+  ├── Management OS (SOPs, personnel, coaching)
+  ├── Scheduling Dashboard (driver clock-in, assignments)
+  └── Future: SAMSARA integration, Angel Cloud ops layer
+```
+
+---
+
+*Last updated: 2026-03-14 · Session 1 · thebardchat/MASTER-Scheduler-Dashboard-SRM*

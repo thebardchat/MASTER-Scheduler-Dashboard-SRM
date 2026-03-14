@@ -4,6 +4,7 @@ import { ALL_PLANTS, SUBS } from './config/plants.js'
 import { getCycleDay, getBPGroup, getBPDrivers, driverBPDay, getBPCalendar, isTueFri } from './utils/rotation.js'
 import { buildShorthand } from './utils/shorthand.js'
 import { addMinutes } from './config/distances.js'
+import PlantDashboard from './components/PlantDashboard.jsx'
 
 /* ═══════════════════════════════════════════════════════════════
    Anthropic-Inspired Design System
@@ -46,7 +47,7 @@ const T = {
   shadowLg: '0 4px 16px rgba(0,0,0,0.4)',
 }
 
-const TAB_CLR  = { ALL:T.brand, "519":T.c519, "507":T.c507, "506":T.c506, BRIDGEPORT:T.cBP, DUMP:T.cDump }
+const TAB_CLR  = { ALL:T.brand, "519":T.c519, "507":T.c507, "506":T.c506, BRIDGEPORT:T.cBP, DUMP:T.cDump, PLANTS:T.green }
 const GRP_CLR  = { A:T.cBP, B:T.amber, C:T.c519 }
 const CREW_CLR = { "507":T.c507, "519":T.c519, "506":T.c506, "516":T.cBP, DUMP:T.cDump, BP:T.cBP }
 
@@ -404,7 +405,7 @@ export default function App() {
       }}>
         {CREW_TABS.map(t => {
           const col = TAB_CLR[t]
-          const active = crew === t
+          const active = crew === t && view !== "PLANTS"
           return (
             <button key={t} onClick={() => { setCrew(t); setView("ROUTES") }} style={{
               background: active ? `${col}15` : 'transparent',
@@ -418,7 +419,15 @@ export default function App() {
             </button>
           )
         })}
-        <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>TAP CARD TO COPY</span>
+        <button onClick={() => setView("PLANTS")} style={{
+          background: view === "PLANTS" ? `${T.green}15` : 'transparent',
+          border: 'none', borderBottom: view === "PLANTS" ? `2px solid ${T.green}` : '2px solid transparent',
+          color: view === "PLANTS" ? T.green : T.text3,
+          padding:'6px 16px 8px', fontSize:'10px', letterSpacing:'0.5px',
+          fontFamily:T.font, fontWeight: view === "PLANTS" ? 600 : 400,
+          transition:'all 0.15s ease',
+        }}>PLANTS</button>
+        <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>{view === "PLANTS" ? 'PLANT STATUS' : 'TAP CARD TO COPY'}</span>
       </div>
 
       {/* ═══ AUDIBLES PANEL ═══ */}
@@ -552,6 +561,11 @@ export default function App() {
           </div>
         )
       })()}
+
+      {/* ═══ PLANT DASHBOARD ═══ */}
+      {view==="PLANTS" && (
+        <PlantDashboard T={T} routeStrings={ALL_DRIVERS.map(d => buildShorthand(d.name, shArgs))} />
+      )}
 
       {/* ═══ DRIVER CARDS ═══ */}
       {view==="ROUTES" && (
@@ -704,8 +718,12 @@ export default function App() {
         <span style={{ fontSize:'8px', color:T.text4 }}>
           MH=Mt. Hope \u00b7 RG=Rogers Group \u00b7 MM=Martin Marietta \u00b7 LQ=Lacey Spring \u00b7 BP=Bridgeport
         </span>
+        <a href="dashboard.html" style={{
+          fontSize:'9px', color:T.brand, textDecoration:'none', fontWeight:500,
+          padding:'4px 12px', border:`1px solid ${T.brandBd}`, borderRadius:'99px',
+        }}>Management OS {'\u2192'}</a>
         <span style={{ fontSize:'8px', color:T.text4 }}>
-          Powered by Claude \u00b7 thebardchat/srm-dispatch
+          Powered by Claude \u00b7 thebardchat/MASTER-Scheduler-Dashboard-SRM
         </span>
       </div>
     </div>
