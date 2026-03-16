@@ -1,8 +1,8 @@
 This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 
 # CLAUDE.md — MASTER-Scheduler-Dashboard-SRM
-### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.2
-### Last Session: 2026-03-14 (Session 2 COMPLETE)
+### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.3
+### Last Session: 2026-03-16 (Session 3 COMPLETE — Consolidation + Proximity Routing)
 
 ---
 
@@ -232,40 +232,44 @@ When a plant is DOWN, `SUBS` map provides fallback:
 
 ---
 
-## Repo Structure (Session 2 Complete)
+## Repo Structure (Session 3 — Consolidated)
 
 ```
-MASTER-Scheduler-Dashboard-SRM/
-├── CLAUDE.md                        ← Claude Code context (v1.2)
+MASTER-Scheduler-Dashboard-SRM/            ← SINGLE SOURCE OF TRUTH
+├── CLAUDE.md                              ← Claude Code context (v1.3)
 ├── README.md
-├── styles.css                       ← root stylesheet for SOP/management pages
+├── styles.css                             ← root stylesheet for SOP/management pages
 ├── package.json
 ├── vite.config.js
 ├── index.html
 ├── src/
 │   ├── main.jsx
-│   ├── App.jsx                      ← dispatch UI + PLANTS tab + nav footer
+│   ├── App.jsx                            ← dispatch UI + PLANTS + SETTINGS + smart keys
 │   ├── components/
-│   │   └── PlantDashboard.jsx       ← plant priority grid with load counts
+│   │   └── PlantDashboard.jsx             ← plant priority grid with load counts
 │   ├── config/
-│   │   ├── crew.js                  ← drivers, BP groups, rotations
-│   │   ├── plants.js                ← plant codes, outside help sets, subs
-│   │   └── distances.js             ← drive time matrix
+│   │   ├── crew.js                        ← drivers, BP groups, rotations
+│   │   ├── plants.js                      ← plant codes, outside help sets, subs
+│   │   ├── distances.js                   ← drive time matrix
+│   │   └── knowledge.js                   ← NEW: editable proximity routing + auto-plan
 │   └── utils/
-│       ├── shorthand.js             ← route generation engine
-│       ├── rotation.js              ← rotation assignment logic
-│       └── loadCounter.js           ← load counting + priority scoring
+│       ├── shorthand.js                   ← route generation engine (proximity-based)
+│       ├── rotation.js                    ← rotation assignment logic
+│       └── loadCounter.js                 ← load counting + priority scoring
 ├── SOPs/
 │   ├── service-efficiency.html
 │   ├── cleanliness-standards.html
-│   └── ...
-├── dashboard.html                   ← management OS entry
+├── dashboard.html                         ← management OS entry
 ├── dashboard-styles.css
-├── scripts/                         ← coaching tools, training
-├── personnel/                       ← performance tracking
-├── affirmations/                    ← morning fire
+├── scripts/                               ← coaching tools, training
+├── personnel/                             ← performance tracking
+├── affirmations/                          ← morning fire
 └── docs/
-    └── master-plan.md               ← mega dashboard roadmap
+    └── master-plan.md                     ← mega dashboard roadmap
+
+DEPRECATED REPOS (no longer develop here):
+  thebardchat/srm-dispatch           → merged into this repo
+  thebardchat/SB-Management-OS       → merged into this repo
 ```
 
 ---
@@ -294,11 +298,23 @@ MASTER-Scheduler-Dashboard-SRM/
 - [x] Route data generated from ALL_DRIVERS + buildShorthand, passed to PlantDashboard via useMemo
 - [x] npm run build passes clean
 
-### Session 3 Priorities (NEXT)
-1. Load priority scoring engine — weighted scoring based on plant type + time of day + loads already delivered
-2. Route optimization suggestions — "Driver X could add a stop at 907 on the way back"
-3. Weekly load report — aggregate loads per plant Mon-Fri
-4. Print-friendly route sheet — one page per driver, clean layout
+### Session 3: Consolidation + Proximity Routing — COMPLETE (2026-03-16)
+- [x] **Consolidated repos:** srm-dispatch + SB-Management-OS merged into this MASTER repo
+- [x] Deprecated srm-dispatch and SB-Management-OS (README deprecation notices)
+- [x] **Fixed 519 crew routing:** scrap to Cherokee, rock OUT of Cherokee spread to plants by proximity (was only delivering back to 519)
+- [x] **Fixed 506 crew routing:** scrap to MH, rock spread to plants by proximity from MH (was hardcoded rotation)
+- [x] **New: knowledge.js** — editable knowledge base with crew quarry assignments, delivery pools, proximity rankings, auto-plan optimizer, spread rules, localStorage persistence
+- [x] **New: Settings panel** — edit crew-to-quarry hub mapping, reorder delivery plant pools, auto-sort by proximity, proximity map visualization, optimization rules display
+- [x] **New: Smart keys** — keyboard shortcuts for all actions (←/→ T M S C A B L E P R 1-6 ?)
+- [x] **New: Auto-plan** — one-click route optimization scoring plants by proximity (70%) + fairness (30%), prevents over-loading single plants
+- [x] npm run build passes clean
+- [x] All features from both deprecated repos preserved — zero functionality lost
+
+### Session 4 Priorities (NEXT)
+1. Route optimization suggestions — "Driver X could add a stop at 907 on the way back"
+2. Weekly load report — aggregate loads per plant Mon-Fri
+3. Print-friendly route sheet — one page per driver, clean layout
+4. Editable drive times from Settings panel
 
 ### Session 4 (FUTURE)
 - SAMSARA GPS integration
@@ -339,7 +355,7 @@ MASTER-Scheduler-Dashboard-SRM
 
 ---
 
-*Last updated: 2026-03-14 · Session 2 Complete · v1.2 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
+*Last updated: 2026-03-16 · Session 3 Complete · v1.3 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
 
 ## Claude Code Rules
 - Commit and push directly to `main`. Do NOT create branches.
