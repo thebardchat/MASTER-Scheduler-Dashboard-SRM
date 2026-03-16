@@ -120,3 +120,44 @@ export function isNearEndOfShift(startMinutes, elapsedMinutes) {
   const current = startMinutes + elapsedMinutes
   return current >= (QUARRY_CLOSE - END_OF_SHIFT_BUFFER)
 }
+
+// ── Route ETA Estimation ──
+// Parse a shorthand route string into stop codes and estimate total minutes.
+// Recognizes plant codes (506-525, 907, 908), quarries (591, 594, 502), POD, MM, RG, LQ.
+const LOCATION_PATTERN = /\b(50[2678]|51[13469]|518|519|525|591|594|907|908|POD|MM|RG|LQ)\b/g
+
+const ALIASES = { LQ: '516', CHER: '594' }
+
+export function parseRouteStops(routeText) {
+  const stops = []
+  let match
+  while ((match = LOCATION_PATTERN.exec(routeText)) !== null) {
+    const code = ALIASES[match[1]] || match[1]
+    if (stops.length === 0 || stops[stops.length - 1] !== code) {
+      stops.push(code)
+    }
+  }
+  LOCATION_PATTERN.lastIndex = 0
+  return stops
+}
+
+export function estimateRouteMinutes(routeText) {
+  const stops = parseRouteStops(routeText)
+  if (stops.length < 2) return 0
+  let total = SCRAP_TIME  // initial scrap pickup
+  for (let i = 0; i < stops.length - 1; i++) {
+    total += getDriveTime(stops[i], stops[i + 1])
+    total += UNLOAD_TIME
+  }
+  return total
+}
+
+export function formatETA(startTimeStr, routeMinutes) {
+  const startMin = timeToMinutes(startTimeStr)
+  const endMin = startMin + routeMinutes
+  const h = Math.floor(endMin / 60)
+  const m = endMin % 60
+  const ampm = h >= 12 ? 'PM' : 'AM'
+  const h12 = h > 12 ? h - 12 : h === 0 ? 12 : h
+  return `~${h12}:${String(m).padStart(2, '0')} ${ampm}`
+}

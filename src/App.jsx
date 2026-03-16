@@ -3,7 +3,7 @@ import { ALL_DRIVERS, CREW_TABS, BP_GROUPS } from './config/crew.js'
 import { ALL_PLANTS, SUBS } from './config/plants.js'
 import { getCycleDay, getBPGroup, getBPDrivers, driverBPDay, getBPCalendar, isTueFri } from './utils/rotation.js'
 import { buildShorthand } from './utils/shorthand.js'
-import { addMinutes, getDriveTime } from './config/distances.js'
+import { addMinutes, getDriveTime, estimateRouteMinutes, formatETA } from './config/distances.js'
 import { CREW_QUARRY, CREW_DELIVERY_POOLS, DELIVERY_PLANTS, getProximityRanking, autoPlanDay, SPREAD_RULES, saveKnowledge, loadKnowledge, clearKnowledge } from './config/knowledge.js'
 import PlantDashboard from './components/PlantDashboard.jsx'
 
@@ -79,11 +79,13 @@ function getDriverColor(driver) {
    Route Step Visualization — parses "→" separated route text
    into color-coded pills for instant visual scanning
    ═══════════════════════════════════════════════════════════════ */
-function RouteSteps({ text, driverClr }) {
+function RouteSteps({ text, driverClr, driverName, onSwapClick, swapActive }) {
   const colonIdx = text.indexOf(':')
   if (colonIdx === -1) return <span style={{ color:T.text2, fontFamily:T.mono, fontSize:'11px' }}>{text}</span>
 
   const rawSteps = text.substring(colonIdx + 1).trim().split('\u2192')
+  // Detect plant codes in steps for tap-to-swap
+  const PLANT_RE = /\b(50[678]|51[13469]|518|519|525|907|908)\b/
 
   return (
     <div style={{ display:'flex', flexWrap:'wrap', gap:'3px 2px', alignItems:'center' }}>
@@ -100,15 +102,20 @@ function RouteSteps({ text, driverClr }) {
         else if (/block/i.test(s))   { fg=T.text2; bg=T.surface }
         else if (/PRELOAD/i.test(s)) { fg=T.blue; bg='rgba(91,155,199,0.08)' }
 
+        const plantMatch = s.match(PLANT_RE)
+        const isSwappable = plantMatch && onSwapClick && !/^Scrap|POD|BP|block|PRELOAD|home$/i.test(s)
+
         return (
           <Fragment key={i}>
             {i > 0 && <span style={{ color:T.text4, fontSize:'8px', margin:'0 1px', userSelect:'none' }}>{'\u2192'}</span>}
-            <span style={{
+            <span onClick={isSwappable ? (e) => { e.stopPropagation(); onSwapClick(driverName, plantMatch[1], i) } : undefined}
+              style={{
               display:'inline-block', padding:'2px 7px', borderRadius:T.rXs,
               fontSize:'10.5px', fontFamily:T.mono, lineHeight:'1.5',
-              color:fg, background:bg,
-              border: s.includes('\u{1F4DE}') ? `1px solid ${T.brandBd}` : '1px solid transparent',
-            }}>{s}</span>
+              color:fg, background: swapActive === i ? `${T.amber}20` : bg,
+              border: s.includes('\u{1F4DE}') ? `1px solid ${T.brandBd}` : swapActive === i ? `1px solid ${T.amber}66` : '1px solid transparent',
+              cursor: isSwappable ? 'pointer' : 'default',
+            }}>{s}{isSwappable && <span style={{ fontSize:'7px', marginLeft:'3px', opacity:0.5 }}>⇄</span>}</span>
           </Fragment>
         )
       })}
@@ -249,6 +256,18 @@ export default function App() {
     return saved?.quarry || { ...CREW_QUARRY }
   })
 
+  /* ── Plant Swap State ── */
+  const [swapDriver, setSwapDriver] = useState(null)  // { driverName, plantCode, index }
+  const [driverPlantOverrides, setDriverPlantOverrides] = useState({})
+
+  function swapPlant(driverName, oldPlant, newPlant) {
+    setDriverPlantOverrides(prev => ({
+      ...prev,
+      [driverName]: { ...(prev[driverName] || {}), [oldPlant]: newPlant },
+    }))
+    setSwapDriver(null)
+  }
+
   function runAutoPlan() {
     const plans = autoPlanDay(ALL_DRIVERS, editQuarry, editPools, cycleDay)
     setAutoPlans(plans)
@@ -360,7 +379,16 @@ export default function App() {
     } else { fallbackCopy(final, key) }
   }, [down])
 
-  const shArgs = { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans }
+  function copyAllRoutes() {
+    const lines = visible.map(driver => {
+      const route = buildShorthand(driver.name, shArgs)
+      return route.replace(/→/g, '→')
+    })
+    const text = `SRM DISPATCH — ${DATE_STR}\n${'─'.repeat(30)}\n\n${lines.join('\n\n')}`
+    copyText(text, '__ALL__')
+  }
+
+  const shArgs = { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans, driverPlantOverrides }
 
   /* ── Generate all routes for PlantDashboard ── */
   const allRoutes = useMemo(() => {
@@ -496,9 +524,20 @@ export default function App() {
             </button>
           )
         })}
-        <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>
-          {view === "PLANTS" ? "PLANT LOAD STATUS" : "TAP CARD TO COPY"}
-        </span>
+        {view === "ROUTES" && (
+          <button onClick={(e) => { e.stopPropagation(); copyAllRoutes() }} style={{
+            marginLeft:'auto', background: copied === '__ALL__' ? `${T.green}15` : T.raised,
+            border:`1px solid ${copied === '__ALL__' ? `${T.green}44` : T.border}`,
+            color: copied === '__ALL__' ? T.green : T.brand,
+            padding:'4px 14px', fontSize:'9px', borderRadius:'99px',
+            fontFamily:T.font, fontWeight:600, letterSpacing:'0.5px',
+          }}>{copied === '__ALL__' ? '✓ ALL COPIED' : 'COPY ALL ROUTES'}</button>
+        )}
+        {view !== "ROUTES" && (
+          <span style={{ marginLeft:'auto', fontSize:'9px', color:T.text4 }}>
+            {view === "PLANTS" ? "PLANT LOAD STATUS" : "TAP CARD TO COPY"}
+          </span>
+        )}
       </div>
 
       {/* ═══ PLANTS DASHBOARD ═══ */}
@@ -904,6 +943,8 @@ export default function App() {
             const effectiveStart = getStart(name, driver.start)
             const isOverridden = startOverrides[name] !== undefined
             const shortText   = buildShorthand(name, shArgs)
+            const routeMins   = estimateRouteMinutes(shortText)
+            const eta         = formatETA(effectiveStart, routeMins)
             const isCopied    = copied === name
             const hasAudible  = [...down].some(d => shortText.includes(d)) || isCurtisOff
             const cardColor   = hasAudible ? T.red : onBP ? T.cBP : driverClr
@@ -998,7 +1039,9 @@ export default function App() {
                           <div style={{ fontSize:'9px', color:i===0?T.cBP:T.c519, fontWeight:600, marginBottom:'4px', letterSpacing:'0.5px' }}>
                             {i===0 ? 'ROUND 1' : 'ROUND 2'}
                           </div>
-                          <RouteSteps text={line} driverClr={i===0?T.cBP:T.c519} />
+                          <RouteSteps text={line} driverClr={i===0?T.cBP:T.c519}
+                            driverName={name} onSwapClick={(dn, pc, idx) => setSwapDriver({ driverName:dn, plantCode:pc, index:idx })}
+                            swapActive={swapDriver?.driverName === name ? swapDriver.index : null} />
                           {i===0 && down.has("ALEXIS_SHORT") && (
                             <div style={{ marginTop:'4px' }}>
                               <Badge label="SHORT DAY \u2014 907 scrap block \u2192 516" color={T.amber} />
@@ -1008,16 +1051,54 @@ export default function App() {
                       ))}
                     </div>
                   ) : (
-                    <RouteSteps text={shortText} driverClr={hasAudible ? T.red : cardColor} />
+                    <RouteSteps text={shortText} driverClr={hasAudible ? T.red : cardColor}
+                      driverName={name} onSwapClick={(dn, pc, idx) => setSwapDriver({ driverName:dn, plantCode:pc, index:idx })}
+                      swapActive={swapDriver?.driverName === name ? swapDriver.index : null} />
+                  )}
+
+                  {/* Swap Plant Picker */}
+                  {swapDriver?.driverName === name && (
+                    <div onClick={(e) => e.stopPropagation()} style={{
+                      marginTop:'8px', padding:'8px 10px', background:T.raised,
+                      border:`1px solid ${T.amber}44`, borderRadius:T.rSm,
+                    }}>
+                      <div style={{ fontSize:'9px', color:T.amber, fontWeight:600, marginBottom:'6px', letterSpacing:'0.5px' }}>
+                        SWAP {swapDriver.plantCode} →
+                      </div>
+                      <div style={{ display:'flex', gap:'4px', flexWrap:'wrap' }}>
+                        {DELIVERY_PLANTS.filter(c => c !== swapDriver.plantCode).map(code => (
+                          <button key={code} onClick={() => swapPlant(name, swapDriver.plantCode, code)} style={{
+                            background:T.surface, border:`1px solid ${T.border}`,
+                            color:T.text2, padding:'4px 10px', fontSize:'10px',
+                            borderRadius:T.rXs, fontFamily:T.mono,
+                          }}>{code}</button>
+                        ))}
+                        <button onClick={() => setSwapDriver(null)} style={{
+                          background:`${T.red}10`, border:`1px solid ${T.red}33`,
+                          color:T.red, padding:'4px 10px', fontSize:'10px',
+                          borderRadius:T.rXs, fontFamily:T.font, fontWeight:500,
+                        }}>CANCEL</button>
+                      </div>
+                    </div>
                   )}
                 </div>
 
-                {/* Footer */}
+                {/* Footer with ETA */}
                 <div style={{ padding:'8px 14px', borderTop:`1px solid ${T.divider}`,
                   display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:'9px', color:T.text4 }}>
-                    {isCopied ? '\u2713 Copied to clipboard' : 'Tap to copy route'}
-                  </span>
+                  <div style={{ display:'flex', gap:'8px', alignItems:'center' }}>
+                    <span style={{ fontSize:'9px', color:T.text4 }}>
+                      {isCopied ? '\u2713 Copied' : 'Tap to copy'}
+                    </span>
+                    {routeMins > 0 && (
+                      <span style={{
+                        fontSize:'9px', fontFamily:T.mono, fontWeight:600,
+                        color:T.blue, background:`${T.blue}10`,
+                        padding:'2px 8px', borderRadius:'99px',
+                        border:`1px solid ${T.blue}25`,
+                      }}>Done {eta} · {Math.floor(routeMins/60)}h{routeMins%60>0?`${routeMins%60}m`:''}</span>
+                    )}
+                  </div>
                   <span style={{
                     fontSize:'8px', color: isCopied ? T.green : T.text4,
                     background: isCopied ? `${T.green}15` : 'transparent',

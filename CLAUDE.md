@@ -1,8 +1,8 @@
 This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 
 # CLAUDE.md — MASTER-Scheduler-Dashboard-SRM
-### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.3
-### Last Session: 2026-03-16 (Session 3 COMPLETE — Consolidation + Proximity Routing)
+### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.4
+### Last Session: 2026-03-16 (Session 4 COMPLETE — Efficiency Features)
 
 ---
 
@@ -310,16 +310,25 @@ DEPRECATED REPOS (no longer develop here):
 - [x] npm run build passes clean
 - [x] All features from both deprecated repos preserved — zero functionality lost
 
-### Session 4 Priorities (NEXT)
+### Session 4: Efficiency Features — COMPLETE (2026-03-16)
+- [x] **Route ETAs on every driver card** — Parses route stops, estimates total drive+load+unload time using drive time matrix, displays "Done ~2:15 PM · 10h15m" on each card footer
+- [x] **Copy ALL routes button** — One-tap "COPY ALL ROUTES" in crew tab bar copies all visible driver routes formatted for morning text blast (header + date + all routes)
+- [x] **Block plant weighted auto-plan** — `autoPlanDay()` now gives 907/908 a -40 score bonus when they have 0 loads, ensuring block plants get served first. Block plants auto-injected into every crew's delivery pool.
+- [x] **Tap-to-swap plant on route cards** — Click any plant pill (marked with ⇄) to open inline picker. Select replacement plant from dropdown. Swap persists via `driverPlantOverrides` state and applies through `applySwaps()` in shorthand.js.
+- [x] npm run build passes clean
+- [x] New exports: `estimateRouteMinutes`, `formatETA`, `parseRouteStops` in distances.js
+- [x] New: `BLOCK_PLANTS` set + block bonus scoring in knowledge.js `autoPlanDay()`
+- [x] Refactored `buildShorthand` → `_buildRoute` + `applySwaps` wrapper for clean plant swap injection
+
+### Session 5 Priorities (NEXT)
 1. Route optimization suggestions — "Driver X could add a stop at 907 on the way back"
 2. Weekly load report — aggregate loads per plant Mon-Fri
 3. Print-friendly route sheet — one page per driver, clean layout
 4. Editable drive times from Settings panel
 
-### Session 4 (FUTURE)
+### Session 5 (FUTURE)
 - SAMSARA GPS integration
 - Real-time truck position overlay
-- Automated ETA calculations
 - Weekly fairness report
 
 ### Backlog
@@ -355,7 +364,7 @@ MASTER-Scheduler-Dashboard-SRM
 
 ---
 
-*Last updated: 2026-03-16 · Session 3 Complete · v1.3 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
+*Last updated: 2026-03-16 · Session 4 Complete · v1.4 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
 
 ## Claude Code Rules
 - Commit and push directly to `main`. Do NOT create branches.

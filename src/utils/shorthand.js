@@ -68,7 +68,12 @@ function proximityPlants(crewCode, names, name, cycleDay, count, down, subMap) {
   return plants
 }
 
-export function buildShorthand(name, { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans }) {
+export function buildShorthand(name, { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans, driverPlantOverrides }) {
+  const route = _buildRoute(name, { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans })
+  return applySwaps(route, name, driverPlantOverrides)
+}
+
+function _buildRoute(name, { tf, mhDay, down, subMap, curtisOffice, swap519, cycleDay, startOverrides, autoPlans }) {
   const mh    = p("591", down, subMap)
   const cher  = p("594", down, subMap)
   const scMH  = `Scrap→${mh}`
@@ -197,4 +202,14 @@ export function buildShorthand(name, { tf, mhDay, down, subMap, curtisOffice, sw
   }
 
   return `${name}: route TBD`
+}
+
+function applySwaps(route, name, overrides) {
+  if (!overrides || !overrides[name]) return route
+  let result = route
+  for (const [oldPlant, newPlant] of Object.entries(overrides[name])) {
+    // Replace plant code in route (word boundary match to avoid partial matches)
+    result = result.replace(new RegExp(`\\b${oldPlant}\\b`, 'g'), newPlant)
+  }
+  return result
 }

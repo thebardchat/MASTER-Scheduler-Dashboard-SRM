@@ -75,18 +75,33 @@ export const SPREAD_RULES = {
   allowCrossCrew: false,
 }
 
+// ── Block Plants — MUST SUPPLY (zero outside help) ──
+export const BLOCK_PLANTS = new Set(["907", "908"])
+
 // ── Auto-Plan: Compute optimal plant assignments for a full day ──
 // Returns { driverName: [plant1, plant2, ...] } based on proximity + fairness
+// Block plants (907, 908) get priority — they're scored with a bonus so they
+// always get served first before full-service or partial-help plants.
 export function autoPlanDay(drivers, crewQuarry, pools, cycleDay, recentHistory = {}) {
   const assignments = {}
   const plantLoadCount = {}  // track how many times each plant is assigned today
 
   DELIVERY_PLANTS.forEach(p => { plantLoadCount[p] = 0 })
 
+  // Ensure block plants are in every crew's pool for auto-plan consideration
+  const expandedPools = {}
+  for (const [crew, pool] of Object.entries(pools)) {
+    const expanded = [...pool]
+    BLOCK_PLANTS.forEach(bp => {
+      if (!expanded.includes(bp)) expanded.push(bp)
+    })
+    expandedPools[crew] = expanded
+  }
+
   drivers.forEach((driver, driverIdx) => {
     const crew = driver.crew
     if (crew === "DUMP" || crew === "516") return  // skip fixed routes
-    const pool = pools[crew] || pools["507"]  // fallback
+    const pool = expandedPools[crew] || expandedPools["507"]  // fallback
     const hub = crewQuarry[crew] || "591"
 
     // Score each plant: lower = better
@@ -96,12 +111,17 @@ export function autoPlanDay(drivers, crewQuarry, pools, cycleDay, recentHistory 
       const recentPenalty = (recentHistory[code] || 0) * 15  // recent service penalty
       const rotationOffset = ((driverIdx + cycleDay) % pool.length) * 5  // spread drivers
 
+      // Block plant bonus: reduce score by 40 if block plant has 0 loads today
+      // This ensures 907/908 get served before other plants starve
+      const blockBonus = BLOCK_PLANTS.has(code) && plantLoadCount[code] === 0 ? -40 : 0
+
       return {
         code,
         score: (proximity * SPREAD_RULES.proximityWeight)
              + (loadPenalty * SPREAD_RULES.fairnessWeight)
              + recentPenalty
-             + rotationOffset,
+             + rotationOffset
+             + blockBonus,
       }
     })
 
