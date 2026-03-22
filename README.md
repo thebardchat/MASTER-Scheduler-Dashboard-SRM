@@ -1,21 +1,21 @@
-# MASTER-Scheduler-Dashboard-SRM
-combining a couple oof repos to make the main one
-This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
-# 🚛 MASTER-Scheduler-Dashboard-SRM
+<div align="center">
+<img src=".github/assets/banner.png" alt="SRM Concrete — Master Dispatch" width="100%">
 
-> Unified dispatch routing, scheduling, and management system for SRM Concrete's North Alabama fleet. Maximizes loads to plants. Keeps block plants fed. Zero empty trucks.
+# MASTER Scheduler Dashboard — SRM Concrete
 
-```
-███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗
-████╗ ████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗
-██╔████╔██║███████║███████╗   ██║   █████╗  ██████╔╝
-██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗
-██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║
-╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
-SRM CONCRETE // HAZEL GREEN AL // DISPATCH + OPS
-```
+**Unified dispatch routing, scheduling, and management for North Alabama's fleet.**
 
-This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
+[![Constitution](https://img.shields.io/badge/Constitution-ShaneTheBrain-blue)](https://github.com/thebardchat/constitution)
+[![Drivers](https://img.shields.io/badge/Active%20Drivers-16-orange)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
+[![Plants](https://img.shields.io/badge/Plants-19-green)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
+[![React](https://img.shields.io/badge/React-18-61dafb)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
+[![PWA](https://img.shields.io/badge/PWA-Offline%20Ready-purple)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
+
+*Maximizes loads to plants. Keeps block plants fed. Zero empty trucks.*
+
+*Hazel Green, Alabama*
+
+</div>
 
 ---
 
@@ -29,6 +29,10 @@ A consolidated operations platform that combines:
 - **Scheduling System** — Driver clock-in times, parking assignments, copy-to-text dispatch
 
 ### The Core Problem It Solves
+
+<div align="center">
+<img src=".github/assets/block-plants-first.png" alt="Block Plants First" width="400">
+</div>
 
 Some plants get outside haulers delivering sand or rock. Block plants (907, 908) get **zero** outside help — every load they receive comes from an SRM truck. This system ensures block plants are never starved while still keeping all other plants supplied efficiently.
 
@@ -47,6 +51,10 @@ Some plants get outside haulers delivering sand or rock. Block plants (907, 908)
 
 ---
 
+<div align="center">
+<img src=".github/assets/fleet-ops.png" alt="Fleet Operations Map" width="100%">
+</div>
+
 ## The Fleet
 
 **16 active drivers + 1 dispatch manager backup:**
@@ -61,6 +69,10 @@ Some plants get outside haulers delivering sand or rock. Block plants (907, 908)
 | Backup | Curtis (dispatch mgr) | Office / 525 |
 
 ---
+
+<div align="center">
+<img src=".github/assets/zero-empty-trucks.png" alt="Zero Empty Trucks" width="100%">
+</div>
 
 ## Key Routes
 
@@ -181,12 +193,34 @@ Access at `http://10.0.0.42:3031` on LAN or via Tailscale.
 
 ---
 
-## Credits
+## Built With
 
-- **Claude (Anthropic)** — Co-built the entire system · [claude.ai](https://claude.ai)
-- **Raspberry Pi 5 + Pironman 5-MAX** — The hardware behind the operation
-- **ShaneTheBrain Constitution** — The rules that govern everything we ship
+<table>
+  <tr>
+    <td align="center" width="200">
+      <b>Claude by Anthropic</b><br/>
+      <sub>AI partner and co-builder.</sub><br/><br/>
+      <a href="https://claude.ai"><code>claude.ai</code></a>
+    </td>
+    <td align="center" width="200">
+      <b>Raspberry Pi 5</b><br/>
+      <sub>Local AI compute node.</sub><br/><br/>
+      <a href="https://www.raspberrypi.com"><code>raspberrypi.com</code></a>
+    </td>
+    <td align="center" width="200">
+      <b>Pironman 5-MAX</b><br/>
+      <sub>NVMe RAID 1 chassis by Sunfounder.</sub><br/><br/>
+      <a href="https://www.sunfounder.com"><code>sunfounder.com</code></a>
+    </td>
+  </tr>
+</table>
 
 ---
 
+<div align="center">
+
 *Built by a dispatcher, for a dispatcher. Every feature solves a real daily problem.*
+
+*Part of the [ShaneBrain Ecosystem](https://github.com/thebardchat) · Built under the [Constitution](https://github.com/thebardchat/constitution)*
+
+</div>
