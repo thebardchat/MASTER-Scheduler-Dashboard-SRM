@@ -305,6 +305,7 @@ export default function App() {
       if (key === "p") runAutoPlan()
       if (key === "r") { setView("ROUTES"); clearAutoPlan() }
       if (key === "l") setView(v => v === "PLANTS" ? "ROUTES" : "PLANTS")
+      if (key === "f") setView(v => v === "FAIRNESS" ? "ROUTES" : "FAIRNESS")
       if (key === "1") setCrew("ALL")
       if (key === "2") setCrew("519")
       if (key === "3") setCrew("507")
@@ -509,6 +510,8 @@ export default function App() {
                     active={view==="AUDIBLES"} color={T.red} onClick={() => setView(v=>v==="AUDIBLES"?"ROUTES":"AUDIBLES")} small />
               <Pill label="PLANTS"
                     active={view==="PLANTS"} color={T.green} onClick={() => setView(v=>v==="PLANTS"?"ROUTES":"PLANTS")} small />
+              <Pill label="FAIRNESS"
+                    active={view==="FAIRNESS"} color={T.amber} onClick={() => setView(v=>v==="FAIRNESS"?"ROUTES":"FAIRNESS")} small />
               <Pill label="BP CALENDAR"
                     active={view==="CALENDAR"} color={T.blue} onClick={() => setView(v=>v==="CALENDAR"?"ROUTES":"CALENDAR")} small />
               <Pill label={autoPlans ? "AUTO-PLAN ON" : "AUTO-PLAN"}
@@ -696,6 +699,136 @@ export default function App() {
         )
       })()}
 
+      {/* ═══ FAIRNESS REPORT ═══ */}
+      {view === "FAIRNESS" && (() => {
+        const cal = getBPCalendar(today)
+        const totalActive = ALL_DRIVERS.filter(d => !down.has(d.name)).length
+        const bpTodayList = getBPDrivers(cycleDay)
+
+        const driverRows = ALL_DRIVERS
+          .filter(d => d.crew !== "DUMP" || d.fixedBP)
+          .map(d => {
+            const bpInfo = driverBPDay(d.name, cycleDay)
+            const grpIdx = Object.entries(BP_GROUPS).findIndex(([, m]) => m.includes(d.name))
+            const bpCount = d.fixedBP ? cal.length : grpIdx === -1 ? 0 : cal.filter(day => day.grpIdx === grpIdx).length
+            const isDown = down.has(d.name)
+            const onBPToday = bpTodayList.includes(d.name) || d.fixedBP
+            const nextCol = !bpInfo ? T.text4 : d.fixedBP ? T.c507 : bpInfo.days === 0 ? T.cBP : bpInfo.days === 1 ? T.amber : T.text3
+            return { ...d, bpInfo, bpCount, isDown, onBPToday, nextCol }
+          })
+          .sort((a, b) => {
+            if (a.fixedBP && !b.fixedBP) return -1
+            if (!a.fixedBP && b.fixedBP) return 1
+            return (a.bpInfo?.days ?? 99) - (b.bpInfo?.days ?? 99)
+          })
+
+        const crewBreakdown = {}
+        ALL_DRIVERS.forEach(d => {
+          if (!crewBreakdown[d.crew]) crewBreakdown[d.crew] = { total: 0, down: 0 }
+          crewBreakdown[d.crew].total++
+          if (down.has(d.name)) crewBreakdown[d.crew].down++
+        })
+
+        return (
+          <div style={{ padding: '20px' }}>
+            <div style={{ fontSize: '10px', color: T.text3, letterSpacing: '2px', marginBottom: '16px', fontWeight: 500 }}>
+              DRIVER FAIRNESS — BP ROTATION + DISPATCH OVERVIEW
+            </div>
+
+            {/* Summary Stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', marginBottom: '20px' }}>
+              {[
+                { label: 'ACTIVE DRIVERS', value: totalActive, color: T.brand },
+                { label: 'DOWN TODAY', value: down.size, color: down.size > 0 ? T.red : T.text4 },
+                { label: 'ON BP TODAY', value: bpTodayList.length, color: T.cBP },
+                { label: 'BP GROUP', value: `GRP ${BP_TODAY}`, color: GRP_CLR[BP_TODAY] },
+                { label: 'TUE/FRI MODE', value: tf ? 'ON' : 'OFF', color: tf ? T.green : T.text4 },
+                { label: 'MH DAY', value: mhDay ? 'ON' : 'OFF', color: mhDay ? T.cBP : T.text4 },
+              ].map(({ label, value, color }) => (
+                <div key={label} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: T.rSm, padding: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 700, color, fontFamily: T.mono }}>{value}</div>
+                  <div style={{ fontSize: '8px', color: T.text3, letterSpacing: '1px', marginTop: '4px' }}>{label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Crew Breakdown */}
+            <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: T.rSm, padding: '14px 16px', marginBottom: '20px' }}>
+              <div style={{ fontSize: '9px', color: T.text4, letterSpacing: '2px', marginBottom: '10px', fontWeight: 500 }}>CREW BREAKDOWN</div>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                {Object.entries(crewBreakdown).map(([crew, { total, down: dCount }]) => {
+                  const col = CREW_CLR[crew] || T.text2
+                  const active = total - dCount
+                  return (
+                    <div key={crew} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 700, color: col, fontFamily: T.mono }}>{crew}</span>
+                      <span style={{ fontSize: '10px', color: T.text }}>{active}/{total}</span>
+                      {dCount > 0 && <Badge label={`${dCount} DOWN`} color={T.red} />}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Driver BP Schedule */}
+            <div style={{ fontSize: '9px', color: T.text4, letterSpacing: '2px', marginBottom: '10px', fontWeight: 500 }}>
+              DRIVER BP SCHEDULE — NEXT ROTATION (15-DAY WINDOW)
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: '8px', marginBottom: '20px' }}>
+              {driverRows.map(({ name, crew, bpInfo, bpCount, isDown, onBPToday, nextCol, fixedBP }) => (
+                <div key={name} style={{
+                  background: onBPToday ? `${nextCol}08` : T.surface,
+                  border: `1px solid ${onBPToday ? `${nextCol}33` : T.border}`,
+                  borderLeft: `3px solid ${isDown ? T.red : nextCol}`,
+                  borderRadius: T.rSm, padding: '10px 12px',
+                  opacity: isDown ? 0.45 : 1,
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: T.text }}>{name}</span>
+                    {isDown && <Badge label="DOWN" color={T.red} />}
+                    {onBPToday && !isDown && <Badge label="BP TODAY" color={T.cBP} />}
+                  </div>
+                  <div style={{ fontSize: '9px', color: CREW_CLR[crew] || T.text2, marginBottom: '6px', fontWeight: 500, letterSpacing: '0.3px' }}>
+                    CREW {crew}
+                  </div>
+                  {!bpInfo ? (
+                    <div style={{ fontSize: '10px', color: T.text4 }}>No BP rotation</div>
+                  ) : fixedBP ? (
+                    <div style={{ fontSize: '10px', color: T.c507, fontWeight: 600 }}>EVERY DAY · Fixed Anchor</div>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: '10px', color: nextCol, fontWeight: 600, marginBottom: '3px' }}>
+                        {bpInfo.label} — Group {bpInfo.groupLabel}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ flex: 1, height: '3px', borderRadius: '2px', background: T.border }}>
+                          <div style={{ height: '100%', width: `${(bpCount / cal.length) * 100}%`, background: nextCol, borderRadius: '2px', transition: 'width 0.3s' }} />
+                        </div>
+                        <span style={{ fontSize: '9px', color: T.text4, fontFamily: T.mono, whiteSpace: 'nowrap' }}>{bpCount}/{cal.length} days</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Dump Crew */}
+            <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: T.rSm, padding: '14px 16px' }}>
+              <div style={{ fontSize: '9px', color: T.text4, letterSpacing: '2px', marginBottom: '8px', fontWeight: 500 }}>DUMP CREW — NO BP ROTATION</div>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                {ALL_DRIVERS.filter(d => d.crew === "DUMP").map(d => (
+                  <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: d.color || T.cDump }}>{d.name}</span>
+                    <span style={{ fontSize: '9px', color: T.text4 }}>Fixed route · {d.start}</span>
+                    {down.has(d.name) && <Badge label="DOWN" color={T.red} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
       {/* ═══ AUTO-PLAN BANNER ═══ */}
       {autoPlans && view === "ROUTES" && (
         <div style={{
@@ -728,6 +861,7 @@ export default function App() {
               ["A", "Show/hide AUDIBLES"],
               ["B", "Show/hide BP CALENDAR"],
               ["L", "Show/hide PLANTS dashboard"],
+              ["F", "Show/hide FAIRNESS report"],
               ["E", "Show/hide SETTINGS"],
               ["P", "Run AUTO-PLAN optimizer"],
               ["R", "Back to ROUTES + clear plan"],

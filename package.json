@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gh": "GITHUB_PAGES=1 vite build",
     "preview": "vite preview",
-    "deploy": "GITHUB_PAGES=1 npm run build && gh-pages -d dist"
+    "deploy": "GITHUB_PAGES=1 npm run build && gh-pages -d dist",
+    "deploy:cf": "npm run build && wrangler pages deploy dist --project-name=srm-dispatch"
   },
   "dependencies": {
     "react": "^18.2.0",

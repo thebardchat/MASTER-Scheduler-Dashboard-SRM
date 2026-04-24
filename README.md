@@ -10,6 +10,7 @@
 [![Plants](https://img.shields.io/badge/Plants-19-green)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
 [![React](https://img.shields.io/badge/React-18-61dafb)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
 [![PWA](https://img.shields.io/badge/PWA-Offline%20Ready-purple)](https://github.com/thebardchat/MASTER-Scheduler-Dashboard-SRM)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?logo=cloudflare&logoColor=white)](https://srm-dispatch.pages.dev)
 
 *Maximizes loads to plants. Keeps block plants fed. Zero empty trucks.*
 
@@ -99,7 +100,8 @@ Groups A/B/C rotate on `cycleDay % 3`. Stacey + Alexis always on BP. Max 1x/week
 | State | Client-side only (no backend) |
 | PWA | vite-plugin-pwa · offline-capable |
 | Build | Vite |
-| Deploy | GitHub Pages · Pi 5 LAN |
+| Deploy | **Cloudflare Pages** (primary) · GitHub Pages · Pi 5 LAN |
+| CI/CD | GitHub Actions → dual deploy |
 
 ---
 
@@ -181,13 +183,14 @@ Access at `http://10.0.0.42:3031` on LAN or via Tailscale.
 ## Roadmap
 
 - [x] CLAUDE.md + README.md for Claude Code
-- [ ] Merge source repos into unified structure
-- [ ] Load priority engine (block plants first)
+- [x] Merge source repos into unified structure
+- [x] Load priority engine (block plants first)
+- [x] Plant needs dashboard (PLANTS view — load status per plant)
+- [x] Load counter (SRM loads vs outside loads per plant)
+- [x] Fairness Report (FAIRNESS view — BP rotation + driver breakdown)
+- [x] Cloudflare Pages deployment + GitHub Actions CI/CD
 - [ ] Add 908 to plant config
-- [ ] Plant needs dashboard (what each plant needs today)
-- [ ] Load counter (SRM loads vs outside loads per plant)
 - [ ] SAMSARA GPS integration
-- [ ] Weekly fairness report
 - [ ] Talk-to-text order entry
 - [ ] Automated phone dispatch
 
@@ -222,5 +225,11 @@ Access at `http://10.0.0.42:3031` on LAN or via Tailscale.
 *Built by a dispatcher, for a dispatcher. Every feature solves a real daily problem.*
 
 *Part of the [ShaneBrain Ecosystem](https://github.com/thebardchat) · Built under the [Constitution](https://github.com/thebardchat/constitution)*
+
+*Built by Shane Brazelton + Claude (Anthropic) — not one guy, but a crew.*
+
+---
+
+> **Try Claude:** [claude.ai/referral/4fAMYN9Ing](https://claude.ai/referral/4fAMYN9Ing)
 
 </div>
