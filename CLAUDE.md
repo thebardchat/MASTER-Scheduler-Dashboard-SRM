@@ -1,8 +1,8 @@
 This project operates under the [ShaneTheBrain Constitution](https://github.com/thebardchat/constitution/blob/main/CONSTITUTION.md).
 
 # CLAUDE.md — MASTER-Scheduler-Dashboard-SRM
-### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.4
-### Last Session: 2026-03-16 (Session 4 COMPLETE — Efficiency Features)
+### Claude Code Context File · thebardchat/MASTER-Scheduler-Dashboard-SRM · v1.5
+### Last Session: 2026-04-24 (Session 5 COMPLETE — Pedal-to-the-Metal Showcase)
 
 ---
 
@@ -320,16 +320,38 @@ DEPRECATED REPOS (no longer develop here):
 - [x] New: `BLOCK_PLANTS` set + block bonus scoring in knowledge.js `autoPlanDay()`
 - [x] Refactored `buildShorthand` → `_buildRoute` + `applySwaps` wrapper for clean plant swap injection
 
-### Session 5 Priorities (NEXT)
-1. Route optimization suggestions — "Driver X could add a stop at 907 on the way back"
-2. Weekly load report — aggregate loads per plant Mon-Fri
-3. Print-friendly route sheet — one page per driver, clean layout
-4. Editable drive times from Settings panel
+### Session 5: Pedal-to-the-Metal Showcase — COMPLETE (2026-04-24)
+- [x] **New: `public/pedal-to-the-metal/`** — standalone showcase site (vanilla HTML/CSS/JS, no build step of its own). Ships via Vite `public/` auto-copy; deploys to `/MASTER-Scheduler-Dashboard-SRM/pedal-to-the-metal/`.
+- [x] **Hero** — full-viewport grid background, scanning line, live clock, "PEDAL / TO THE / METAL." display type (Archivo Black), 4 KPI tiles, scrolling ticker.
+- [x] **Live fleet grid** — all 17 real drivers rendered as cards with pulsing status lights (idle / loading / rolling / needs-load). Blinking red bar on any truck flagged NEEDS LOAD.
+- [x] **Load queue** — synthetic orders tick up in real time, block-plant orders auto-sorted to top with red-accent rows, elapsed-time thresholds color-shift to amber → red.
+- [x] **Plant scoreboard** — 12 real plants incl. 907/908 block plants with priority lights (RED blinks when block plant has 0 loads).
+- [x] **North Alabama map** — SVG with plants, quarries, dashed route lines, moving truck dots (CSS animated positions driven by JS path interpolation).
+- [x] **"Why this matters" pitch section** — 6 feature cards selling the Samsara-ready, phone-catcher, block-plant-first story.
+- [x] **Footer** — "Built in Hazel Green, Alabama · To the Hollingshead standard of excellence."
+- [x] **Dashboard link-over** — prominent red→amber gradient `PEDAL TO THE METAL →` pill in the App.jsx header action row, opens showcase in a new tab.
+- [x] **Samsara-ready, not Samsara-dependent** — all data is simulated; adapter layer in `pedal.js` is the single point to swap for real Samsara API later.
+- [x] npm run build passes clean (dist/pedal-to-the-metal/ copied verbatim).
 
-### Session 5 (FUTURE)
-- SAMSARA GPS integration
-- Real-time truck position overlay
-- Weekly fairness report
+### Future Repo Split
+When ready to move this to `github.com/thebardchat/pedal-to-the-metal`:
+```
+git subtree split --prefix=public/pedal-to-the-metal -b pedal-split
+# then push pedal-split branch to the new repo as main
+```
+
+### Session 6 Priorities (NEXT)
+1. Wire the "blinking needs-load" alerts into the live Master Scheduler dashboard (not just the showcase) — driven by manual toggle or order-system feed.
+2. Phone auto-answer on the Pi — Asterisk + Telnyx SIP + Whisper + Piper stack.
+3. Route optimization suggestions — "Driver X could add a stop at 907 on the way back."
+4. Weekly load report — aggregate loads per plant Mon-Fri.
+5. Print-friendly route sheet — one page per driver, clean layout.
+6. Editable drive times from Settings panel.
+
+### Session 6 (FUTURE)
+- SAMSARA GPS integration (when token is available — adapter already designed for it).
+- Real-time truck position overlay.
+- Weekly fairness report.
 
 ### Backlog
 - Talk-to-text order entry
@@ -364,7 +386,7 @@ MASTER-Scheduler-Dashboard-SRM
 
 ---
 
-*Last updated: 2026-03-16 · Session 4 Complete · v1.4 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
+*Last updated: 2026-04-24 · Session 5 Complete · v1.5 · thebardchat/MASTER-Scheduler-Dashboard-SRM*
 
 ## Claude Code Rules
 - Commit and push directly to `main`. Do NOT create branches.

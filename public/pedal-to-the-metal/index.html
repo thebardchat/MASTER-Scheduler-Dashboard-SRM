@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0908" />
+<title>PEDAL TO THE METAL · SRM Fleet Command</title>
+<meta name="description" content="SRM Concrete Fleet Command — Live Dispatch Intelligence. Built in Hazel Green, Alabama." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="pedal.css" />
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="nav">
+  <a class="nav-brand" href="#top">
+    <span class="brand-mark"></span>
+    <span class="brand-text">PEDAL<em>/</em>TO<em>/</em>THE<em>/</em>METAL</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#fleet">FLEET</a>
+    <a href="#loads">LOADS</a>
+    <a href="#plants">PLANTS</a>
+    <a href="#map">MAP</a>
+    <a href="#pitch">WHY</a>
+    <a href="../" class="nav-back">← DISPATCH</a>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section id="top" class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-scan"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <span class="dot live"></span> LIVE FROM HAZEL GREEN, AL &nbsp;·&nbsp; <span id="heroClock">--:--:--</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="title-row">PEDAL</span>
+      <span class="title-row">TO&nbsp;THE</span>
+      <span class="title-row accent">METAL<span class="title-dot">.</span></span>
+    </h1>
+    <p class="hero-sub">
+      SRM Concrete Fleet Command.<br/>
+      Every truck, every load, every plant — one screen, zero delay.
+    </p>
+    <div class="hero-cta">
+      <a href="#fleet" class="btn btn-primary">SEE THE FLEET <span>→</span></a>
+      <a href="../" class="btn btn-ghost">BACK TO DISPATCH</a>
+    </div>
+    <div class="hero-kpis">
+      <div class="kpi"><div class="kpi-num" id="kpiTrucks">17</div><div class="kpi-lbl">ACTIVE TRUCKS</div></div>
+      <div class="kpi"><div class="kpi-num" id="kpiLoads">0</div><div class="kpi-lbl">LOADS TODAY</div></div>
+      <div class="kpi"><div class="kpi-num" id="kpiPlants">12</div><div class="kpi-lbl">PLANTS SUPPLIED</div></div>
+      <div class="kpi"><div class="kpi-num" id="kpiMissed">0</div><div class="kpi-lbl">MISSED CALLS</div></div>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+</section>
+
+<!-- ── FLEET ── -->
+<section id="fleet" class="section">
+  <div class="section-head">
+    <div class="eyebrow">01 / FLEET</div>
+    <h2>LIVE TRUCK STATUS</h2>
+    <p class="section-sub">One light per truck. Red blink = needs load. Amber = loading. Green = rolling. Gray = idle.</p>
+    <div class="legend">
+      <span><span class="dot needs"></span> NEEDS LOAD</span>
+      <span><span class="dot loading"></span> LOADING</span>
+      <span><span class="dot rolling"></span> ROLLING</span>
+      <span><span class="dot idle"></span> IDLE</span>
+    </div>
+  </div>
+  <div class="fleet-grid" id="fleetGrid"></div>
+</section>
+
+<!-- ── LOADS ── -->
+<section id="loads" class="section section-alt">
+  <div class="section-head">
+    <div class="eyebrow">02 / LOAD QUEUE</div>
+    <h2>ORDERS WAITING FOR A TRUCK</h2>
+    <p class="section-sub">Every row ticks up the second it enters the queue. Block plants jump to the top automatically.</p>
+  </div>
+  <div class="queue" id="loadQueue"></div>
+</section>
+
+<!-- ── PLANTS ── -->
+<section id="plants" class="section">
+  <div class="section-head">
+    <div class="eyebrow">03 / PLANTS</div>
+    <h2>PLANT SUPPLY SCOREBOARD</h2>
+    <p class="section-sub">Block plants (907, 908) can never go outside for help. If they blink red, we're behind.</p>
+  </div>
+  <div class="plants-grid" id="plantsGrid"></div>
+</section>
+
+<!-- ── MAP ── -->
+<section id="map" class="section section-alt">
+  <div class="section-head">
+    <div class="eyebrow">04 / MAP</div>
+    <h2>NORTH ALABAMA · LIVE POSITIONS</h2>
+    <p class="section-sub">Demo view. Wire Samsara and these dots move in real time.</p>
+  </div>
+  <div class="map-wrap">
+    <svg class="map-svg" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <radialGradient id="plantGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#c8102e" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="quarryGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffb627" stop-opacity="0.40"/>
+          <stop offset="100%" stop-color="#ffb627" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- stylized border -->
+      <path class="map-border"
+            d="M40,120 L200,80 L420,60 L640,90 L860,70 L960,140 L940,320 L880,460 L700,500 L460,520 L240,480 L100,420 L60,280 Z"/>
+      <!-- route lines -->
+      <g class="routes" id="mapRoutes"></g>
+      <!-- plants -->
+      <g id="mapPlants"></g>
+      <!-- quarries -->
+      <g id="mapQuarries"></g>
+      <!-- trucks (moving dots) -->
+      <g id="mapTrucks"></g>
+    </svg>
+    <div class="map-legend">
+      <span><i class="sq red"></i> PLANT</span>
+      <span><i class="sq amber"></i> QUARRY</span>
+      <span><i class="sq white"></i> TRUCK</span>
+      <span><i class="sq block"></i> BLOCK PLANT</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY / PITCH ── -->
+<section id="pitch" class="section">
+  <div class="section-head">
+    <div class="eyebrow">05 / WHY THIS MATTERS</div>
+    <h2>BUILT FOR ONE JOB:<br/>MORE LOADS, ZERO SLACK.</h2>
+  </div>
+  <div class="pitch-grid">
+    <div class="pitch-card">
+      <div class="pitch-num">01</div>
+      <h3>NEVER MISS A LOAD</h3>
+      <p>One blinking red light the second a truck needs to be loaded. You can see it from across the yard.</p>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-num">02</div>
+      <h3>BLOCK PLANTS NEVER STARVE</h3>
+      <p>907 and 908 get zero outside help. This dashboard pushes them to the top of every queue automatically.</p>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-num">03</div>
+      <h3>NO EMPTY TRUCKS</h3>
+      <p>Scrap out, rock back. Every leg carries material. Auto-routing fills the return trip by default.</p>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-num">04</div>
+      <h3>SAMSARA-READY</h3>
+      <p>Flip a switch and every card wires to live GPS. Until then, the ops layer runs on manual toggles — nothing's blocked.</p>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-num">05</div>
+      <h3>PHONE CATCHER</h3>
+      <p>Miss a call? An in-house answer layer logs who called, what they need, and drops it in the queue. No subscription.</p>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-num">06</div>
+      <h3>BUILT IN HOUSE</h3>
+      <p>No SaaS lock-in. Runs on a Pi in the dispatch office. Works offline. Shane's code, Shane's rules.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="foot">
+  <div class="foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark lg"></span>
+      <div>
+        <div class="foot-title">PEDAL TO THE METAL</div>
+        <div class="foot-sub">SRM Concrete Fleet Command · v0.1</div>
+      </div>
+    </div>
+    <div class="foot-meta">
+      <div>Built in Hazel Green, Alabama.</div>
+      <div>To the Hollingshead standard of excellence.</div>
+      <div class="foot-year">© <span id="year">2026</span> · SRM Concrete · North Alabama Dispatch</div>
+    </div>
+  </div>
+</footer>
+
+<script src="pedal.js"></script>
+</body>
+</html>

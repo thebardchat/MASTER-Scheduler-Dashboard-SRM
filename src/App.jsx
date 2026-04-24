@@ -483,6 +483,25 @@ export default function App() {
             </div>
             {/* Action Buttons */}
             <div style={{ display:'flex', gap:'6px', flexWrap:'wrap', justifyContent:'flex-end' }}>
+              <a href="./pedal-to-the-metal/" target="_blank" rel="noopener" style={{
+                display:'inline-flex', alignItems:'center', gap:'6px',
+                padding:'4px 12px', fontSize:'9px', letterSpacing:'1.2px',
+                fontFamily:T.font, fontWeight:800, textTransform:'uppercase',
+                color:'#fff', textDecoration:'none',
+                background:'linear-gradient(90deg, #c8102e 0%, #e8253d 55%, #ffb627 100%)',
+                border:'1px solid rgba(255,255,255,0.08)',
+                borderRadius:'99px',
+                boxShadow:'0 2px 10px rgba(200,16,46,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)',
+                transition:'transform 0.08s, box-shadow 0.15s',
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.97)'}
+              onMouseUp={e => e.currentTarget.style.transform = ''}
+              onMouseLeave={e => e.currentTarget.style.transform = ''}
+              title="Open Pedal-to-the-Metal showcase in a new tab">
+                <span style={{ width:'6px', height:'6px', background:'#fff', borderRadius:'50%',
+                  boxShadow:'0 0 8px #fff', animation:'none' }}></span>
+                PEDAL TO THE METAL →
+              </a>
               <Pill label="MH DAY"  active={mhDay}    color={T.cBP}   onClick={() => setMhDay(p=>!p)}   small />
               <Pill label="519 SWAP" active={swap519}  color={T.c519}  onClick={() => setSwap519(p=>!p)} small />
               <Pill label="CURTIS OFFICE" active={curtisOffice} color={T.amber} onClick={() => setCurtisOffice(p=>!p)} small />
